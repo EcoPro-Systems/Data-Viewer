@@ -1,0 +1,72 @@
+{
+    "layers": [
+        {
+            "id": "Reference_Labels",
+            "title": "Reference Labels",
+            "type": "reference",
+            "handleAs": "GIBS_raster",
+            "updateParameters": {
+                "time": false
+            }
+        },
+        {
+            "id": "Reference_Features",
+            "title": "Reference Features",
+            "type": "reference",
+            "handleAs": "GIBS_raster",
+            "updateParameters": {
+                "time": false
+            }
+        },
+        {
+            "id": "Mapbox_Satellite",
+            "title": "Mapbox Satellite",
+            "type": "basemap",
+            "thumbnailImage": "https://a.tiles.mapbox.com/v4/mapbox.satellite/2/1/2.png?access_token=pk.eyJ1IjoiYWFyb25wbGF2ZSIsImEiOiJjamU0eDVqYnAxYTh0MzBycWl2dnpxdWFrIn0.JwpMMB2c-TpLxC7DXZzmUg",
+            "handleAs": "xyz_raster",
+            "updateParameters": {
+                "time": false
+            },
+            "mappingOptions": {
+                "url": "https://a.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWFyb25wbGF2ZSIsImEiOiJjamU0eDVqYnAxYTh0MzBycWl2dnpxdWFrIn0.JwpMMB2c-TpLxC7DXZzmUg",
+                "projection": "EPSG:3857",
+                "layer": "Mapbox_Satellite",
+                "tileGrid": {
+                    "minZoom": 0,
+                    "maxZoom": 19
+                }
+            }
+        },
+        {
+            "id": "BlueMarble_ShadedRelief_Bathymetry",
+            "title": "Blue Marble, Shaded Relief w/Bathymetry",
+            "type": "basemap",
+            "thumbnailImage": "img/BlueMarble_ShadedRelief_Bathymetry.jpeg",
+            "handleAs": "GIBS_raster",
+            "isDefault": true,
+            "updateParameters": {
+                "time": false
+            }
+        },
+        {
+            "id": "OSM_Land_Water_Map",
+            "title": "Land/Water Map (data from OSM)",
+            "type": "basemap",
+            "thumbnailImage": "img/OSM_Land_Water_Map.png",
+            "handleAs": "GIBS_raster",
+            "updateParameters": {
+                "time": false
+            }
+        },
+        {
+            "id": "ASTER_GDEM_Color_Shaded_Relief",
+            "title": "Digital Elevation Map (Color Shaded Relief)",
+            "type": "basemap",
+            "thumbnailImage": "img/ASTER_GDEM_Color_Shaded_Relief.jpeg",
+            "handleAs": "GIBS_raster",
+            "updateParameters": {
+                "time": false
+            }
+        }
+    ]
+}

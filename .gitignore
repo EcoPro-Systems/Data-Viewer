@@ -1,0 +1,10 @@
+.DS_Store
+*.nc
+*.tif
+*.bak
+*.orig
+README
+
+# ignore cached tiles
+geoserver_data/
+common-mapping-client_build
