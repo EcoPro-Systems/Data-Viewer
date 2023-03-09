@@ -1,6 +1,7 @@
 import MapWrapperCesiumCore from "_core/utils/MapWrapperCesium";
 import * as appStringsCore from "_core/constants/appStrings";
 import * as appStrings from "constants/appStrings";
+import CustomCesiumTilingScheme from "utils/cesium/CustomTilingScheme";
 import TileHandler from "utils/TileHandler";
 import MapUtil from "utils/MapUtil";
 
@@ -148,5 +149,28 @@ export default class MapWrapperCesium extends MapWrapperCesiumCore {
             console.warn("Error in MapWrapperCesium.getDataAtCoordinate:", err);
             return [];
         }
+    }
+
+    createTilingScheme(options, tileSchemeOptions) {
+        if (
+            options.projection === appStringsCore.PROJECTIONS.latlon.code ||
+            appStringsCore.PROJECTIONS.latlon.aliases.indexOf(options.projection) !== -1
+        ) {
+            return MapWrapperCesiumCore.prototype.createTilingScheme.call(
+                this,
+                options,
+                tileSchemeOptions
+            );
+        } else if (
+            options.projection === appStringsCore.PROJECTIONS.webmercator.code ||
+            appStringsCore.PROJECTIONS.webmercator.aliases.indexOf(options.projection) !== -1
+        ) {
+            return MapWrapperCesiumCore.prototype.createTilingScheme.call(
+                this,
+                options,
+                tileSchemeOptions
+            );
+        }
+        return new CustomCesiumTilingScheme(options, tileSchemeOptions);
     }
 }
