@@ -1,8 +1,10 @@
+import * as Ol_Proj from "ol/proj";
 import MapWrapperOpenlayersCore from "_core/utils/MapWrapperOpenlayers";
 import * as appStringsCore from "_core/constants/appStrings";
 import * as appStrings from "constants/appStrings";
 import MapUtil from "utils/MapUtil";
 import TileHandler from "utils/TileHandler";
+import appConfig from "constants/appConfig";
 
 export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
     initStaticClasses(container, options) {
@@ -36,7 +38,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                     const tileGrid = source.getTileGrid(); // the tilegrid will give us tile coordinates and extents
                     const res = this.map.getView().getResolution();
                     const tileCoord = tileGrid.getTileCoordForCoordAndResolution(
-                        [coords.lat, coords.lon],
+                        coords.originalCoord,
                         res
                     );
                     if (source.tileCache.containsKey(tileCoord.join("/"))) {
@@ -50,7 +52,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                                 tileExtent[2],
                                 tileExtent[1],
                             ]);
-                            const tileSize = tileGrid.getTileSize();
+                            const tileSize = tileGrid.getTileSize() || tileGrid.getTileSize(0);
                             const tileWidth = tilePixelBR[0] - tilePixelUL[0];
                             const scale = tileWidth / tileSize;
 
@@ -126,19 +128,25 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
     getLatLonFromPixelCoordinate(pixel, constrainCoords = true) {
         try {
             let coordinate = this.map.getCoordinateFromPixel(pixel);
-            coordinate = constrainCoords
-                ? this.mapUtil.constrainCoordinates(coordinate)
-                : coordinate;
+            let latLonCoord = Ol_Proj.transform(
+                coordinate,
+                this.map.getView().getProjection().getCode(),
+                appStringsCore.PROJECTIONS.latlon.code
+            );
+            latLonCoord = constrainCoords
+                ? this.mapUtil.constrainCoordinates(latLonCoord)
+                : latLonCoord;
             if (
-                typeof coordinate[0] !== "undefined" &&
-                typeof coordinate[1] !== "undefined" &&
-                !isNaN(coordinate[0]) &&
-                !isNaN(coordinate[0])
+                typeof latLonCoord[0] !== "undefined" &&
+                typeof latLonCoord[1] !== "undefined" &&
+                !isNaN(latLonCoord[0]) &&
+                !isNaN(latLonCoord[0])
             ) {
                 return {
-                    lat: coordinate[0],
-                    lon: coordinate[1],
-                    isValid: coordinate[1] <= 90 && coordinate[1] >= -90,
+                    lat: latLonCoord[0],
+                    lon: latLonCoord[1],
+                    isValid: latLonCoord[1] <= 90 && latLonCoord[1] >= -90,
+                    originalCoord: coordinate
                 };
             }
             return false;
