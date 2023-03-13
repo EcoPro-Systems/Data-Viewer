@@ -49,16 +49,16 @@ _DATE_SLIDER_RESOLUTIONS = [
 ];
 
 APPLICATION_CONFIG = {
-    APP_TITLE: "CMC + GeoServer",
+    APP_TITLE: "EcoPro Data Viewer",
     DATE_SLIDER_ENABLED: true,
+    DATE_PICKER_RESOLUTION: "years",
     DATE_SLIDER_RESOLUTIONS: _DATE_SLIDER_RESOLUTIONS,
     DEFAULT_DATE_SLIDER_RESOLUTION: _DATE_SLIDER_RESOLUTIONS[0],
-    MAX_DATE: new Date("2100-01-01"),
-    DATE_PICKER_RESOLUTION: "years",
-    DEFAULT_MAP_EXTENT: [-180 * 2, -40, 180 * 2, 60],
-    DEFAULT_BBOX_EXTENT: [-180, -40, 180, 60],
     URLS: {
-        paletteConfig: ["default-data/user_app/palettes.json", "default-data/user_app/heat.json"],
+        paletteConfig: [
+            "default-data/user_app/palettes.json",
+            "default-data/user_app/tree_mortality.json",
+        ],
         layerConfig: [
             {
                 url: "//gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml",
@@ -82,13 +82,13 @@ APPLICATION_CONFIG = {
                             },
                         },
                     },
-                    "^user_app:nabove2090s*": {
+                    "^user_app:gridRefEsri_treeMortality*": {
                         isDisabled: true,
                         min: 0,
-                        max: 365,
+                        max: 100,
                         units: " ",
                         palette: {
-                            name: "heat",
+                            name: "tree_mortality",
                             handleAs: "json-fixed",
                         },
                         updateParameters: {
@@ -100,12 +100,12 @@ APPLICATION_CONFIG = {
                                 openlayers: "kvpTimeParam_wmts",
                                 cesium: "kvpTimeParam_wmts",
                             },
-                            url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Anabove2090s_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                         },
                     },
-                    "^user_app:nabove2090s_2005$": {
-                        title: "nabove2090s (2005/2035/2055/2095)",
+                    "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84_2014$": {
                         isDisabled: false,
+                        title: "Tree Mortality Severity (2014 - 2021)",
                     },
                 },
             },
