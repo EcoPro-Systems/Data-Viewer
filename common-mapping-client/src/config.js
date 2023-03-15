@@ -58,6 +58,7 @@ APPLICATION_CONFIG = {
         paletteConfig: [
             "default-data/user_app/palettes.json",
             "default-data/user_app/tree_mortality.json",
+            "default-data/user_app/reef.json",
         ],
         layerConfig: [
             {
@@ -106,6 +107,15 @@ APPLICATION_CONFIG = {
                     "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84_2014$": {
                         isDisabled: false,
                         title: "Tree Mortality Severity (2014 - 2021)",
+                    },
+                    "^user_app:raster_nature_ssp*": {
+                        min: 2012,
+                        max: 2100,
+                        units: " ",
+                        palette: {
+                            name: "reef",
+                            handleAs: "json-fixed",
+                        },
                     },
                 },
             },
