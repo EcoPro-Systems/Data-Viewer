@@ -30,3 +30,7 @@ Once you have run `./scripts/start.sh -d` there should be a new directory presen
 
 ### GeoServer management
 The admin username:pass is set as `admin:cmc_geoserver` it is highly advised to change this
+
+### EcoPro
+
+ * sync: `rsync -rave "ssh -i ~/.ssh/ecoPro_2022a.pem" --exclude=.git* ~/Workspace/ecopro_transfer ubuntu@52.9.58.194:~/transfer/`
