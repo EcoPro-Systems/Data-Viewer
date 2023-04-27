@@ -32,6 +32,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                 if (
                     mapLayer.getVisible() &&
                     mapLayer.get("_layerType") === appStringsCore.LAYER_GROUP_TYPE_DATA &&
+                    mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1 &&
                     typeof mapLayer.getSource === "function"
                 ) {
                     const source = mapLayer.getSource();
@@ -146,7 +147,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                     lat: latLonCoord[0],
                     lon: latLonCoord[1],
                     isValid: latLonCoord[1] <= 90 && latLonCoord[1] >= -90,
-                    originalCoord: coordinate
+                    originalCoord: coordinate,
                 };
             }
             return false;
