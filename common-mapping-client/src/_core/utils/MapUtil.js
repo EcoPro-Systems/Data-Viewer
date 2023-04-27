@@ -389,6 +389,8 @@ export default class MapUtil {
         if (url.indexOf("{") >= 0) {
             // resolve tile-URL template
             url = url
+                .replace("{Layer}", layerId)
+                .replace("{Format}", format)
                 .replace("{TileMatrixSet}", tileMatrixSet)
                 .replace("{TileMatrix}", tileMatrix)
                 .replace("{TileRow}", row.toString())
