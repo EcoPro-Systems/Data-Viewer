@@ -7,6 +7,7 @@
 
 import Immutable from "immutable";
 import MapReducerCore from "_core/reducers/reducerFunctions/MapReducer";
+import { layerModel } from "reducers/models/map";
 import * as appStringsCore from "_core/constants/appStrings";
 
 //IMPORTANT: Note that with Redux, state should NEVER be changed.
@@ -14,6 +15,10 @@ import * as appStringsCore from "_core/constants/appStrings";
 //create a copy of the state passed and set new values on the copy.
 
 export default class MapReducer extends MapReducerCore {
+    static getLayerModel() {
+        return layerModel;
+    }
+
     static ingestLayerConfig(state, action) {
         let newPartials = [];
         const currPartials = state.getIn(["layers", appStringsCore.LAYER_GROUP_TYPE_PARTIAL]);

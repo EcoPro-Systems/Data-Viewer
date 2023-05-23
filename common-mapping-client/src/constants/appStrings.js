@@ -6,6 +6,8 @@ export const TREE_MORTALITY_URL = "tree_mortality_url";
 export const NO_DATA = "No Data";
 export const UNKNOWN = "Unknown";
 
+export const LAYER_GROUP_NONE = "_NONE_";
+
 export const ADDITIONAL_PROJECTIONS = {
     NAD83: {
         code: "EPSG:3310",

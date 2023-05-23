@@ -1,0 +1,57 @@
+@import "~styles/colors";
+
+.collapseGroup {
+    margin-top: 1.2rem;
+    border-bottom: 1px solid lighten($color-medium, 20%);
+    padding-bottom: 0.4rem;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+    &.open {
+    }
+    &.closed {
+        .collapseGroupItems {
+            height: 0px;
+            overflow: hidden;
+        }
+    }
+    .collapseGroupItems {
+        height: 100%;
+        position: relative;
+    }
+}
+
+.collapseGroupTitle {
+    font-weight: 600;
+    padding: 0rem 1.2rem 0.8rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transform: rotate(0deg);
+        &.closed {
+            transform: (rotate(-90deg));
+        }
+    }
+}
+
+.collapseSubGroup {
+    margin-left: 3.2rem;
+    border-bottom: none;
+    &:first-of-type {
+        margin-top: 0px;
+    }
+    &.open {
+    }
+    .collapseGroupTitle {
+        padding-left: 0px;
+    }
+    .collapseGroupItems {
+        border-left: 1px solid $color-medium-light;
+    }
+}

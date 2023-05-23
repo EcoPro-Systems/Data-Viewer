@@ -6,6 +6,7 @@
  */
 
 import Immutable from "immutable";
+import * as appStrings from "constants/appStrings";
 import { mapState as mapStateCore, layerModel as layerModelCore } from "_core/reducers/models/map";
 
 export const mapState = mapStateCore.mergeDeep(
@@ -16,5 +17,11 @@ export const mapState = mapStateCore.mergeDeep(
                 showData: true,
             },
         },
+    })
+);
+
+export const layerModel = layerModelCore.mergeDeep(
+    Immutable.fromJS({
+        group: appStrings.LAYER_GROUP_NONE,
     })
 );

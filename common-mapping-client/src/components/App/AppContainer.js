@@ -27,7 +27,7 @@ import { AlertsContainer } from "_core/components/Alerts";
 import { TimelineContainer } from "_core/components/Timeline";
 import { DatePickerContainer } from "components/Date";
 import { AppBarContainer } from "_core/components/AppBar";
-import { LayerMenuContainer } from "_core/components/LayerMenu";
+import { LayerMenuContainer } from "components/LayerMenu";
 import { MouseFollowerContainer } from "_core/components/MouseFollower";
 import { DataDisplayContainer } from "components/DataDisplay";
 // import { AnalyticsContainer } from "_core/components/Analytics";

@@ -173,7 +173,6 @@ export class LayerControlContainer extends Component {
                         {this.renderIconRow()}
                     </div>
                 </Collapse>
-                <Divider />
             </div>
         );
     }

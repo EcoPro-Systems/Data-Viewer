@@ -89,6 +89,7 @@ export class LayerMenuContainer extends Component {
                                         palette={this.props.palettes.get(
                                             layer.getIn(["palette", "name"])
                                         )}
+                                        className={styles.layerControl}
                                     />
                                 ))}
                             </List>
