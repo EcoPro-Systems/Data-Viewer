@@ -144,7 +144,7 @@ export default class MapWrapperOpenlayers extends MapWrapper {
             let viewOptions = options.get("view").toJS();
             let mapProjection = Ol_Proj.get(appConfig.DEFAULT_PROJECTION.code);
 
-            return new Ol_Map({
+            const map = new Ol_Map({
                 target: container,
                 layers: [vectorLayer],
                 view: new Ol_View({
@@ -161,6 +161,17 @@ export default class MapWrapperOpenlayers extends MapWrapper {
                     keyboard: false,
                 }),
             });
+
+            if (!appConfig.MAP_IMAGE_SMOOTHING) {
+                map.on("precompose", (evt) => {
+                    evt.context.imageSmoothingEnabled = false;
+                    evt.context.webkitImageSmoothingEnabled = false;
+                    evt.context.mozImageSmoothingEnabled = false;
+                    evt.context.msImageSmoothingEnabled = false;
+                });
+            }
+
+            return map;
         } catch (err) {
             console.warn("Error in MapWrapperOpenlayers.createMap:", err);
             return false;
