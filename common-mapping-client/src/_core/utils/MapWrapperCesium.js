@@ -1480,6 +1480,7 @@ export default class MapWrapperCesium extends MapWrapper {
      */
     setLayerRefInfo(layer, mapLayer) {
         try {
+            mapLayer._layerRef = layer;
             mapLayer._layerId = layer.get("id");
             mapLayer._layerType = layer.get("type");
             mapLayer._layerHandleAs = layer.get("handleAs");
@@ -2241,7 +2242,9 @@ export default class MapWrapperCesium extends MapWrapper {
             customUrlFunction = this.tileHandler.getUrlFunction(appStrings.DEFAULT_URL_FUNC_WMTS);
         }
 
-        level = mapLayer.imageryProvider._tileMatrixLabels ? mapLayer.imageryProvider._tileMatrixLabels[level] : level;
+        level = mapLayer.imageryProvider._tileMatrixLabels
+            ? mapLayer.imageryProvider._tileMatrixLabels[level]
+            : level;
         if (typeof customUrlFunction === "function") {
             let tileFunc = () => {
                 // use cesium's promise library

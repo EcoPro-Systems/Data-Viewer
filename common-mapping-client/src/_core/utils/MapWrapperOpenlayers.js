@@ -425,6 +425,7 @@ export default class MapWrapperOpenlayers extends MapWrapper {
      */
     setLayerRefInfo(layer, mapLayer) {
         try {
+            mapLayer.set("_layerRef", layer);
             mapLayer.set("_layerId", layer.get("id"));
             mapLayer.set("_layerType", layer.get("type"));
             mapLayer.set("_layerCacheHash", this.getCacheHash(layer));
