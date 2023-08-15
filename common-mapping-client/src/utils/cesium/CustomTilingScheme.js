@@ -150,7 +150,6 @@ export default class CustomCesiumTilingScheme extends window.Cesium.GeographicTi
         projectedRectangle.north = northeast.latitude;
         return this._tileXYToRectangle_(x, y, level, result);
         return projectedRectangle;
-
     }
 
     // TODO

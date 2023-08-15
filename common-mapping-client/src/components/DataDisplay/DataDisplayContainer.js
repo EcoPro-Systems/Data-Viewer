@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Immutable from "immutable";
 import Paper from "@material-ui/core/Paper";
 import { DataDisplay } from "components/DataDisplay";
 import { MouseCoordinates } from "_core/components/MouseFollower";
@@ -10,9 +11,8 @@ import styles from "components/DataDisplay/DataDisplayContainer.scss";
 
 export class DataDisplayContainer extends Component {
     render() {
-        const dataAvailable =
-            this.props.pixelCoordinate.get("isValid") &&
-            this.props.pixelCoordinate.get("data").size > 0;
+        const dataArr = this.props.pixelCoordinate.getIn(["data", "raster"]) || Immutable.List();
+        const dataAvailable = this.props.pixelCoordinate.get("isValid") && dataArr.size > 0;
 
         const containerClasses = MiscUtil.generateStringFromSet({
             [styles.root]: true,
@@ -34,7 +34,7 @@ export class DataDisplayContainer extends Component {
             <Paper elevation={2} className={containerClasses}>
                 {dataAvailable ? (
                     <Paper elevation={2} className={styles.valueWrapper}>
-                        {this.props.pixelCoordinate.get("data").map((entry, i) => (
+                        {dataArr.map((entry, i) => (
                             <DataDisplay key={"mouse-follow-data-" + i} data={entry} />
                         ))}
                     </Paper>

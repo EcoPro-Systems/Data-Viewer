@@ -1,6 +1,12 @@
 export const EXTRACT_DATA_OL = "extractData_OL";
 export const EXTRACT_DATA_CS = "extractData_CS";
 
+export const KVP_TIME_PARAM_URL = "kvpTimeParam";
+
+export const COLORBAR_DYNAMIC = "dynamic";
+
+export const LAYER_VECTOR_TILE_POINTS = "vector_tile_points_mvt";
+
 export const TREE_MORTALITY_URL = "tree_mortality_url";
 
 export const NO_DATA = "No Data";

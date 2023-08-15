@@ -17,7 +17,8 @@ import * as appStrings from "_core/constants/appStrings";
 import appConfig from "constants/appConfig";
 import MiscUtil from "_core/utils/MiscUtil";
 import MapUtil from "_core/utils/MapUtil";
-import { MapContainer, MapContextMenu, MapControlsContainer } from "_core/components/Map";
+// import { MapContextMenu } from "_core/components/Map";
+import { MapContainer, MapControlsContainer } from "components/Map";
 import { SettingsContainer } from "_core/components/Settings";
 import { ShareContainer } from "_core/components/Share";
 import { LayerInfoContainer } from "_core/components/LayerInfo";
@@ -28,7 +29,7 @@ import { TimelineContainer } from "_core/components/Timeline";
 import { DatePickerContainer } from "components/Date";
 import { AppBarContainer } from "_core/components/AppBar";
 import { LayerMenuContainer } from "components/LayerMenu";
-import { MouseFollowerContainer } from "_core/components/MouseFollower";
+import { MouseFollowerContainer } from "components/MouseFollower";
 import { DataDisplayContainer } from "components/DataDisplay";
 // import { AnalyticsContainer } from "_core/components/Analytics";
 import { KeyboardControlsContainer } from "_core/components/KeyboardControls";
@@ -95,7 +96,7 @@ export class AppContainer extends Component {
                 setTimeout(() => {
                     // initialize the maps
                     this.props.initializeMap(appStrings.MAP_LIB_2D, "map2D");
-                    this.props.initializeMap(appStrings.MAP_LIB_3D, "map3D");
+                    // this.props.initializeMap(appStrings.MAP_LIB_3D, "map3D");
 
                     // set initial view
                     this.props.setMapView({ extent: appConfig.DEFAULT_BBOX_EXTENT }, true);
@@ -131,10 +132,12 @@ export class AppContainer extends Component {
                 <div className={containerClasses}>
                     <MapContainer />
                     <LoadingContainer />
-                    {appConfig.DATE_SLIDER_ENABLED ? (<React.Fragment>
-                        <DatePickerContainer />
-                        <TimelineContainer />
-                        </React.Fragment>) : null}
+                    {appConfig.DATE_SLIDER_ENABLED ? (
+                        <React.Fragment>
+                            <DatePickerContainer />
+                            <TimelineContainer />
+                        </React.Fragment>
+                    ) : null}
                     <MapControlsContainer className={styles.mapControls} />
                     <DataDisplayContainer />
                     <AppBarContainer />
@@ -143,7 +146,6 @@ export class AppContainer extends Component {
                     <LayerInfoContainer />
                     <LayerMenuContainer />
                     <AlertsContainer />
-                    <MapContextMenu />
                     <MouseFollowerContainer />
                     <KeyboardControlsContainer />
                 </div>

@@ -33,6 +33,18 @@ export class LayerMenuContainer extends Component {
         };
     }
 
+    countActiveInGroup = (group) => {
+        let count = 0;
+        for (const item of group.items) {
+            if (!item.isLeaf) {
+                count += this.countActiveInGroup(item);
+            } else {
+                count += item.layer.get("isActive");
+            }
+        }
+        return count;
+    };
+
     renderLayerGroups = (layerGroups, activeNum, isSub = false) => {
         const { groupOpen } = this.state;
         return (
@@ -50,6 +62,8 @@ export class LayerMenuContainer extends Component {
                     const iconClass = MiscUtil.generateStringFromSet({
                         [styles.closed]: !isOpen,
                     });
+
+                    const activeLayers = this.countActiveInGroup(layerGroup);
                     return (
                         <div key={`layer_group_${layerGroup.label}`} className={groupClass}>
                             <div
@@ -60,8 +74,11 @@ export class LayerMenuContainer extends Component {
                                     })
                                 }
                             >
-                                <KeyboardArrowDownIcon className={iconClass}/>
+                                <KeyboardArrowDownIcon className={iconClass} />
                                 {layerGroup.label}
+                                <Typography variant="caption" className={styles.collapseSubtitle}>
+                                    {activeLayers} active
+                                </Typography>
                             </div>
                             <div className={styles.collapseGroupItems}>
                                 {this.renderLayerGroups(subGroups, activeNum, true)}

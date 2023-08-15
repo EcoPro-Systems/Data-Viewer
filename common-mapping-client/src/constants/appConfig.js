@@ -18,6 +18,7 @@ const OPS_CONFIG = Immutable.fromJS(window.APPLICATION_CONFIG);
 
 // define your overrides for Core config here
 const APP_CONFIG = Immutable.fromJS({
+    MAP_IMAGE_SMOOTHING: false,
     DEFAULT_MAP_EXTENT: [-180 * 2, -90, 180 * 2, 90],
     DEFAULT_BBOX_EXTENT: [-128, 34, -113, 41],
     TILE_LAYER_UPDATE_STRATEGY: "replace_layer",

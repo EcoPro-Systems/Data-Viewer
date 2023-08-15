@@ -2134,9 +2134,24 @@ export default class MapWrapperCesium extends MapWrapper {
      * @memberof MapWrapperCesium
      */
     createGeoJsonSource(layer, options) {
+        if (
+            typeof options.url !== "undefined" &&
+            typeof layer.getIn(["urlFunctions", appStrings.MAP_LIB_3D]) !== "undefined"
+        ) {
+            let urlFunction = this.tileHandler.getUrlFunction(
+                layer.getIn(["urlFunctions", appStrings.MAP_LIB_3D])
+            );
+            options.url = urlFunction({
+                layer: layer,
+                url: options.url,
+                mapDate: this.mapDate,
+            });
+        }
+
         return this.cesium.GeoJsonDataSource.load(options.url, {
-            stroke: this.cesium.Color.fromCssColorString("#1E90FF"),
-            fill: this.cesium.Color.fromCssColorString("#FEFEFE").withAlpha(0.5),
+            stroke: this.cesium.Color.fromCssColorString("#000000"),
+            // fill: this.cesium.Color.fromCssColorString("#FFFFFF").withAlpha(0.01),
+            fill: this.cesium.Color.TRANSPARENT,
             strokeWidth: 3,
             show: layer.get("isActive"),
         });

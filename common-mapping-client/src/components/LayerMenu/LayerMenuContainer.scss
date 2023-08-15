@@ -5,10 +5,8 @@
     border-bottom: 1px solid lighten($color-medium, 20%);
     padding-bottom: 0.4rem;
 
-    &:last-of-type {
+    &:last-child {
         border-bottom: none;
-    }
-    &.open {
     }
     &.closed {
         .collapseGroupItems {
@@ -46,7 +44,10 @@
     &:first-of-type {
         margin-top: 0px;
     }
-    &.open {
+    &.closed {
+        .collapseGroupTitle {
+            padding-bottom: 0px;
+        }
     }
     .collapseGroupTitle {
         padding-left: 0px;
@@ -54,4 +55,9 @@
     .collapseGroupItems {
         border-left: 1px solid $color-medium-light;
     }
+}
+
+.collapseSubtitle {
+    flex: 1 1;
+    text-align: right;
 }

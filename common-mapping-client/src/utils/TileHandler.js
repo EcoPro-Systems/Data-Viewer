@@ -1,8 +1,24 @@
 import Immutable from "immutable";
+import moment from "moment";
 import TileHandlerCore from "_core/utils/TileHandler";
 import * as appStrings from "constants/appStrings";
 
 export default class TileHandler extends TileHandlerCore {
+    static getUrlFunction(functionString = "") {
+        switch (functionString) {
+            case appStrings.TREE_MORTALITY_URL:
+                return (options) => {
+                    return this._treeMortalityUrl(options);
+                };
+            case appStrings.KVP_TIME_PARAM_URL:
+                return (options) => {
+                    return this._kvpTimeParamUrlWms(options);
+                };
+            default:
+                return super.getUrlFunction.call(this, functionString);
+        }
+    }
+
     static getTileFunction(functionString = "") {
         switch (functionString) {
             case appStrings.EXTRACT_DATA_OL:
@@ -12,6 +28,47 @@ export default class TileHandler extends TileHandlerCore {
             default:
                 return super.getTileFunction.call(this, functionString);
         }
+    }
+
+    static _treeMortalityUrl(options) {
+        let { layer, mapLayer, url } = options;
+        url = super._defaultKVPUrlWmts.call(this, options);
+
+        let timeStr =
+            typeof mapLayer.get === "function" ? mapLayer.get("_layerTime") : mapLayer._layerTime;
+        if (
+            layer.getIn(["mappingOptions", "timeAliases"]) &&
+            typeof layer.getIn(["mappingOptions", "timeAliases", timeStr]) !== "undefined"
+        ) {
+            timeStr = layer.getIn(["mappingOptions", "timeAliases", timeStr]);
+            if (url.indexOf("{") >= 0) {
+                url = url
+                    .replace("{Time}", timeStr)
+                    .replace("{TIME}", timeStr)
+                    .replace("{time}", timeStr);
+            } else {
+                url = `${url}&TIME=${timeStr}`;
+            }
+            console.log(url);
+            return url;
+        } else {
+            return undefined;
+        }
+    }
+
+    static _kvpTimeParamUrlWms(options) {
+        let { url, layer, mapDate } = options;
+
+        let timeStr = moment(mapDate).format(layer.get("timeFormat"));
+        if (typeof timeStr !== "undefined") {
+            if (url.indexOf("{") >= 0) {
+                url = url.replace("{Time}", timeStr);
+            } else {
+                url = url + "&TIME=" + timeStr;
+            }
+        }
+
+        return url;
     }
 
     static _dataExtraction_OL(options) {
@@ -73,12 +130,7 @@ export default class TileHandler extends TileHandlerCore {
 
     static _dataExtraction_CS(options) {
         // get some object references
-        let layer = options.layer;
-        let mapLayer = options.mapLayer;
-        let tileCoord = options.tileCoord;
-        let url = options.url;
-        let success = options.success;
-        let fail = options.fail;
+        let { layer, mapLayer, tileCoord, url, success, fail } = options;
 
         // load in the image with crossOrigin allowances
         TileHandler._loadImage({

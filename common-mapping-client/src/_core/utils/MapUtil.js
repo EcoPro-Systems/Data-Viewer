@@ -932,7 +932,7 @@ export default class MapUtil {
         let currCoord =
             MiscUtil.padNumber(Math.abs(lon).toFixed(3), 5, "&nbsp;") +
             lonUnit +
-            "," +
+            ", " +
             MiscUtil.padNumber(Math.abs(lat).toFixed(3), 6, "&nbsp;") +
             latUnit;
 

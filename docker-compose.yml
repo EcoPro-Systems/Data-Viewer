@@ -12,7 +12,7 @@ services:
             - ROOT_WEBAPP_REDIRECT=true
             - INSTALL_EXTENSIONS=true
             - SKIP_DEMO_DATA=true
-            - STABLE_EXTENSIONS=netcdf
+            - STABLE_EXTENSIONS=netcdf,vectortiles,importer
             - CORS_ENABLED=true
         deploy:
             restart_policy:

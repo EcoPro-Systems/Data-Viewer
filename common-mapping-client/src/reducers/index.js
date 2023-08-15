@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
     asynchronous,
     analytics,
     alerts,
-    webWorker
+    webWorker,
 });
 
 export default rootReducer;

@@ -144,7 +144,7 @@ export default class MapWrapperCesium extends MapWrapperCesiumCore {
                     }
                 }
             }
-            return data.reverse(); // reverse the order so that when its displayed, the layer on top of the map will be first
+            return { raster: data.reverse(), vector: [] }; // reverse the order so that when its displayed, the layer on top of the map will be first
         } catch (err) {
             console.warn("Error in MapWrapperCesium.getDataAtCoordinate:", err);
             return [];

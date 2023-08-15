@@ -2542,6 +2542,7 @@ export default class MapWrapperOpenlayers extends MapWrapper {
             options.url = urlFunction({
                 layer: layer,
                 url: options.url,
+                mapDate: this.mapDate,
             });
         }
 

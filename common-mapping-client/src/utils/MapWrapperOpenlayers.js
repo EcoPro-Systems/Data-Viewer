@@ -1,4 +1,12 @@
+import moment from "moment";
+import chroma from "chroma-js";
 import * as Ol_Proj from "ol/proj";
+import Ol_Style from "ol/style/Style";
+import Ol_Style_Stroke from "ol/style/Stroke";
+import Ol_Style_Fill from "ol/style/Fill";
+import Ol_Style_Circle from "ol/style/Circle";
+import Ol_Layer_Vector from "ol/layer/Vector";
+import Ol_Source_Cluster from "ol/source/Cluster";
 import MapWrapperOpenlayersCore from "_core/utils/MapWrapperOpenlayers";
 import * as appStringsCore from "_core/constants/appStrings";
 import * as appStrings from "constants/appStrings";
@@ -13,28 +21,169 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
         this.tileHandler = TileHandler;
     }
 
-    createLayer(layer, fromCache = true) {
-        let mapLayer = MapWrapperOpenlayersCore.prototype.createLayer.call(this, layer, fromCache);
-        if (mapLayer) {
-            mapLayer.set("_layerRef", layer);
+    initObjects(container, options) {
+        MapWrapperOpenlayersCore.prototype.initObjects.call(this, container, options);
+        this.layerLoadCallback = undefined;
+    }
+
+    setLayerLoadCallback(callback) {
+        if (typeof callback === "function") {
+            this.layerLoadCallback = callback;
         }
-        return mapLayer;
+    }
+
+    createLayer(layer, date, fromCache = true) {
+        // pull from cache if possible
+        let cacheHash = this.getCacheHash(layer, date);
+        if (fromCache && this.layerCache.get(cacheHash)) {
+            let cachedLayer = this.layerCache.get(cacheHash);
+            cachedLayer.setOpacity(layer.get("opacity"));
+            cachedLayer.setVisible(layer.get("isActive"));
+
+            if (
+                typeof cachedLayer.getSource === "function" &&
+                cachedLayer.getSource().get("_hasLoaded")
+            ) {
+                // run async to avoid reducer block
+                window.requestAnimationFrame(() => {
+                    // run the call back (if it exists)
+                    if (typeof this.layerLoadCallback === "function") {
+                        this.layerLoadCallback(layer);
+                    }
+                });
+            }
+
+            return cachedLayer;
+        }
+
+        return MapWrapperOpenlayersCore.prototype.createLayer.call(
+            this,
+            layer,
+            false // we don't want the parent class using the wrong cache key
+        );
+    }
+
+    // TODO - different vector layer types/styling
+    createVectorLayer(layer, fromCache = true) {
+        try {
+            let layerSource = this.createLayerSource(layer, {
+                url: layer.get("url"),
+            });
+
+            if (layer.get("clusterVector")) {
+                const distance =
+                    layer.getIn(["mappingOptions", "displayProps", "clusterRange"]) || 5;
+                layerSource = new Ol_Source_Cluster({ source: layerSource, distance });
+            }
+
+            const defFill = new Ol_Style_Fill({
+                color: "rgba(255,255,255,0)",
+            });
+            const defStroke = new Ol_Style_Stroke({
+                color: "rgba(0,0,0,1)",
+                width: 1.25,
+            });
+            let style;
+            let sizeProp = layer.getIn(["mappingOptions", "displayProps", "size"]);
+            let colorProp = layer.getIn(["mappingOptions", "displayProps", "color"]);
+            if (sizeProp || colorProp) {
+                sizeProp = sizeProp || colorProp;
+                colorProp = colorProp || sizeProp;
+
+                const maxSize = layer.getIn(["mappingOptions", "displayProps", "maxSize"]) || 20;
+                const minSize = layer.getIn(["mappingOptions", "displayProps", "minSize"]) || 5;
+                const maxScale =
+                    layer.getIn(["mappingOptions", "displayProps", "maxScale"]) ||
+                    layer.get("max") ||
+                    100;
+                const minScale =
+                    layer.getIn(["mappingOptions", "displayProps", "minScale"]) ||
+                    layer.get("min") ||
+                    0;
+                const colorScale = chroma
+                    .scale(layer.getIn(["mappingOptions", "displayProps", "palette"]))
+                    .mode("lab")
+                    .correctLightness();
+
+                style = (feature, res) => {
+                    let sizeVal = 0;
+                    let colorVal = 0;
+                    const clusteredFeatures = feature.get("features");
+                    if (clusteredFeatures) {
+                        clusteredFeatures.forEach((feat) => {
+                            sizeVal += parseFloat(feat.getProperties()[sizeProp]);
+                            colorVal += parseFloat(feat.getProperties()[colorProp]);
+                        });
+                        // get average val
+                        // sizeVal /= clusteredFeatures.length;
+                        colorVal /= clusteredFeatures.length;
+                    } else {
+                        sizeVal = parseFloat(feature.getProperties()[sizeProp]);
+                        colorVal = parseFloat(feature.getProperties()[colorProp]);
+                    }
+
+                    const view = this.map.getView();
+                    const mapScale = Ol_Proj.getPointResolution(
+                        view.getProjection(),
+                        view.getResolution(),
+                        view.getCenter(),
+                        "m"
+                    );
+                    const colorScaler = (colorVal - minScale) / (maxScale - minScale);
+
+                    sizeVal = Math.sqrt(sizeVal); // deal with area scaling
+                    const scaledSize = sizeVal / mapScale;
+                    const size = Math.min(Math.max(minSize, scaledSize), maxSize);
+
+                    const fill = new Ol_Style_Fill({
+                        color: colorScale(colorScaler),
+                    });
+
+                    return new Ol_Style({
+                        image: new Ol_Style_Circle({
+                            fill: fill,
+                            stroke: defStroke,
+                            radius: size,
+                        }),
+                        stroke: defStroke,
+                        fill: fill,
+                    });
+                };
+            } else {
+                style = new Ol_Style({
+                    image: new Ol_Style_Circle({
+                        fill: defFill,
+                        stroke: defStroke,
+                        radius: 5,
+                    }),
+                    stroke: defStroke,
+                    fill: defFill,
+                });
+            }
+
+            return new Ol_Layer_Vector({
+                source: layerSource,
+                opacity: layer.get("opacity"),
+                visible: layer.get("isActive"),
+                extent: appConfig.DEFAULT_MAP_EXTENT,
+                style,
+            });
+        } catch (err) {
+            console.warn("Error in MapWrapperOpenlayers.createVectorLayer:", err);
+            return false;
+        }
     }
 
     getDataAtPoint(coords, pixel, palettes) {
         try {
-            let data = []; // the collection of pixel data to return
-            let mapLayers = this.map.getLayers(); // the layers to search
             coords = this.getLatLonFromPixelCoordinate(pixel, false); // need deconstrained coords
-            mapLayers.forEach((mapLayer) => {
-                // check only data layers that are visible and have a viable palette
-                const layer = mapLayer.get("_layerRef");
-                if (
-                    mapLayer.getVisible() &&
-                    mapLayer.get("_layerType") === appStringsCore.LAYER_GROUP_TYPE_DATA &&
-                    mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1 &&
-                    typeof mapLayer.getSource === "function"
-                ) {
+
+            // get raster layer data
+            let rasterData = [];
+            this.map.forEachLayerAtPixel(
+                pixel,
+                (mapLayer) => {
+                    const layer = mapLayer.get("_layerRef");
                     const source = mapLayer.getSource();
                     const tileGrid = source.getTileGrid(); // the tilegrid will give us tile coordinates and extents
                     const res = this.map.getView().getResolution();
@@ -83,7 +232,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                                 units: layer.get("units"),
                             });
 
-                            data.push({
+                            rasterData.push({
                                 layer: layer.get("id"),
                                 label: layer.get("title"),
                                 subtitle: layer.get("subtitle"),
@@ -91,7 +240,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                                 color: hexColor,
                             });
                         } else {
-                            data.push({
+                            rasterData.push({
                                 layer: layer.get("id"),
                                 label: layer.get("title"),
                                 subtitle: layer.get("subtitle"),
@@ -100,7 +249,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                             });
                         }
                     } else {
-                        data.push({
+                        rasterData.push({
                             layer: layer.get("id"),
                             label: layer.get("title"),
                             subtitle: layer.get("subtitle"),
@@ -108,12 +257,70 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                             color: "#00000000",
                         });
                     }
+                },
+                {
+                    layerFilter: (mapLayer) => {
+                        // check only data layers that are visible and have a viable palette
+                        return (
+                            mapLayer.getVisible() &&
+                            mapLayer.get("_layerType") === appStringsCore.LAYER_GROUP_TYPE_DATA &&
+                            mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1 &&
+                            typeof mapLayer.getSource === "function"
+                        );
+                    },
                 }
-            });
-            return data.reverse(); // reverse the data so that when its displayed, the layer on top of the map will be first
+            );
+
+            // collect vector feature data
+            const featureData = [];
+            this.map.forEachFeatureAtPixel(
+                pixel,
+                (feature, mapLayer) => {
+                    const layer = mapLayer.get("_layerRef");
+                    if (layer.getIn(["metadata", "hoverDisplayProps"])) {
+                        let properties = feature.getProperties();
+
+                        // aggregate values from cluster
+                        const clusteredFeatures = feature.get("features");
+                        if (clusteredFeatures) {
+                            properties = clusteredFeatures.reduce((acc, feat) => {
+                                const featureProps = feat.getProperties();
+                                for (let key in featureProps) {
+                                    const val = featureProps[key];
+                                    if (typeof val === "number") {
+                                        if (!acc[key]) {
+                                            acc[key] = val;
+                                        } else {
+                                            acc[key] += val;
+                                        }
+                                    }
+                                }
+                                return acc;
+                            }, {});
+                        }
+
+                        featureData.push({
+                            layer: mapLayer.get("_layerId"),
+                            properties: properties,
+                            coords: coords,
+                        });
+                    }
+                },
+                {
+                    layerFilter: (mapLayer) => {
+                        return (
+                            mapLayer.getVisible() &&
+                            mapLayer.get("_layerType") === appStringsCore.LAYER_GROUP_TYPE_DATA
+                        );
+                    },
+                }
+            );
+
+            // reverse the data so that when its displayed, the layer on top of the map will be first
+            return { raster: rasterData.reverse(), vector: featureData.reverse() };
         } catch (err) {
             console.warn("Error in MapWrapperOpenlayers.getDataAtPoint:", err);
-            return [];
+            return {};
         }
     }
 
@@ -155,5 +362,10 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
             console.warn("Error in MapWrapper_openlayers.getLatLonFromPixelCoordinate:", err);
             return false;
         }
+    }
+
+    getCacheHash(layer, date = false) {
+        date = date || this.mapDate;
+        return `${layer.get("id")}_${moment.utc(date).format(layer.get("timeFormat"))}`;
     }
 }

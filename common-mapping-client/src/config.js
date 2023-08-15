@@ -37,13 +37,25 @@ APPLICATION_CONFIG = {
 };
 ```
 
+
+NOTES:
+
+cannot use single layer because WMTS doesn't support env for band selection
+cannot use WMS because URL modification is not built out
+
 */
 
 _DATE_SLIDER_RESOLUTIONS = [
     {
+        label: "months",
+        resolution: "months",
+        format: "YYYY MMM DD",
+        visMajorFormat: "YYYY",
+    },
+    {
         label: "years",
         resolution: "years",
-        format: "YYYY MMM",
+        format: "YYYY MMM DD",
         visMajorFormat: "YYYY",
     },
 ];
@@ -51,9 +63,10 @@ _DATE_SLIDER_RESOLUTIONS = [
 APPLICATION_CONFIG = {
     APP_TITLE: "EcoPro Data Viewer",
     DATE_SLIDER_ENABLED: true,
-    DATE_PICKER_RESOLUTION: "years",
+    DATE_PICKER_RESOLUTION: "months",
     DATE_SLIDER_RESOLUTIONS: _DATE_SLIDER_RESOLUTIONS,
     DEFAULT_DATE_SLIDER_RESOLUTION: _DATE_SLIDER_RESOLUTIONS[0],
+    DELETE_LAYER_PARTIALS: true,
     URLS: {
         paletteConfig: [
             "default-data/user_app/palettes.json",
@@ -83,11 +96,13 @@ APPLICATION_CONFIG = {
                             },
                         },
                     },
-                    "^user_app:gridRefEsri_treeMortality*": {
+
+                    "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84*": {
                         isDisabled: true,
                         min: 0,
                         max: 100,
                         units: " ",
+                        group: ["Tree Mortality - Sierra Nevada"],
                         palette: {
                             name: "tree_mortality",
                             handleAs: "json-fixed",
@@ -108,14 +123,73 @@ APPLICATION_CONFIG = {
                         isDisabled: false,
                         title: "Tree Mortality Severity (2014 - 2021)",
                     },
+
                     "^user_app:raster_nature_ssp*": {
                         min: 2012,
                         max: 2100,
                         units: " ",
+                        group: "Reef Mortality",
                         palette: {
                             name: "reef",
                             handleAs: "json-fixed",
                         },
+                    },
+
+                    "^user_app:kelp_*": {
+                        isDisabled: true,
+                        handleAs: "vector_geojson",
+                        url: "http://localhost/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
+                        clusterVector: true,
+                        mappingOptions: {
+                            displayProps: {
+                                size: "area",
+                                color: "biomass",
+                                minScale: 0,
+                                maxScale: 20000,
+                                minSize: 5,
+                                maxSize: 30,
+                                clusterRange: 40,
+                                palette: "YlOrRd",
+                            },
+                        },
+                        min: 0,
+                        max: 20000,
+                        palette: {
+                            name: "YlOrRd",
+                            handleAs: "dynamic",
+                        },
+                        updateParameters: {
+                            time: true,
+                        },
+                        timeFormat: "YYYYMM",
+                        urlFunctions: {
+                            openlayers: "kvpTimeParam",
+                            cesium: "kvpTimeParam",
+                        },
+                        units: "Kg",
+                        metadata: {
+                            hoverDisplayProps: {
+                                location: {
+                                    lat: "latitude",
+                                    lon: "longitude",
+                                },
+                                altProps: [
+                                    {
+                                        label: "Biomass",
+                                        value: "biomass",
+                                    },
+                                    {
+                                        label: "Area",
+                                        value: "area",
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    "user_app:kelp_19840214": {
+                        isDisabled: false,
+                        title: "Kelp Biomass",
+                        group: "Kelp Mortality",
                     },
                 },
             },

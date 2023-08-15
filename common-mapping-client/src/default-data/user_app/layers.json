@@ -1,6 +1,19 @@
 {
     "layers": [
         {
+            "id": "Sierra_Nevada_Conservancy_Boundary",
+            "title": "Sierra Nevada Conservancy Boundary",
+            "type": "data",
+            "handleAs": "vector_geojson",
+            "group": [
+                "Tree Mortality - Sierra Nevada"
+            ],
+            "updateParameters": {
+                "time": false
+            },
+            "url": "default-data/user_app/Sierra_Nevada_Conservancy_Boundary_buffer.geojson"
+        },
+        {
             "id": "Reference_Labels",
             "title": "Reference Labels",
             "type": "reference",
