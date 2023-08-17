@@ -8,4 +8,4 @@
 
 # Start the stack
 echo "starting services..."
-docker-compose up $1
+docker compose up $1

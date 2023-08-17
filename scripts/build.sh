@@ -2,7 +2,7 @@
 
 # Build the docker images
 echo "building..."
-docker-compose build
+docker compose build
 
 if [[ ! -d common-mapping-client_build ]]
 then
