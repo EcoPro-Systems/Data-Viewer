@@ -165,4 +165,18 @@ export default class MapReducer extends MapReducerCore {
         });
         return state.setIn(["view", "pixelHoverCoordinate"], pixelCoordinate);
     }
+
+    static setLayerLoading(state, action) {
+        let actionLayer = action.layer;
+        if (typeof actionLayer === "string") {
+            actionLayer = this.findLayerById(state, actionLayer);
+        }
+        if (typeof actionLayer !== "undefined") {
+            state = state.setIn(
+                ["layers", actionLayer.get("type"), actionLayer.get("id"), "isLoading"],
+                action.isLoading
+            );
+        }
+        return state;
+    }
 }

@@ -6,7 +6,7 @@
  */
 
 import fetch from "isomorphic-fetch";
-import objectAssign from "object-assign";
+import moment from "moment";
 import * as appStrings from "_core/constants/appStrings";
 
 export default class MiscUtil {
@@ -80,7 +80,7 @@ export default class MiscUtil {
      * @memberof MiscUtil
      */
     static findAllMatchingObjectsInArray(array, key, val) {
-        return array.filter(element => {
+        return array.filter((element) => {
             return (
                 element[key] === val ||
                 (typeof element.get === "function" && element.get(key) === val)
@@ -108,7 +108,7 @@ export default class MiscUtil {
             ) {
                 return {
                     value: array[i],
-                    index: i
+                    index: i,
                 };
             }
         }
@@ -173,10 +173,10 @@ export default class MiscUtil {
 
         if (rgbParts && rgbParts.length === 3) {
             // Parse string array to int array
-            let rgbPartsInt = rgbParts.map(x => parseInt(x, 10));
+            let rgbPartsInt = rgbParts.map((x) => parseInt(x, 10));
 
             // Validate rgb components are [0-255]
-            if (rgbPartsInt.some(x => x < 0 || x > 255)) {
+            if (rgbPartsInt.some((x) => x < 0 || x > 255)) {
                 return "";
             }
             let hexStr =
@@ -296,7 +296,7 @@ export default class MiscUtil {
                 ) {
                     acc.push({
                         key: paramParts[0],
-                        value: paramParts.slice(1).join("=")
+                        value: paramParts.slice(1).join("="),
                     });
                 }
                 return acc;
@@ -418,7 +418,7 @@ export default class MiscUtil {
 
         return new Promise((resolve, reject) => {
             fetch(url, fetchOptions)
-                .then(response => {
+                .then((response) => {
                     if (response.status >= 400) {
                         reject(new Error("Bad response from server"));
                     } else {
@@ -442,13 +442,74 @@ export default class MiscUtil {
                         }
                     }
                 })
-                .then(parsedResponse => {
+                .then((parsedResponse) => {
                     resolve(parsedResponse);
                 })
-                .catch(err => {
+                .catch((err) => {
                     console.warn("Error in asyncFetch: ", err);
                     reject(err);
                 });
         });
+    }
+
+    /**
+     * Format a date using a moment-js format string with optional rounding
+     *
+     * @static
+     * @param {Date} date the date object to format
+     * @param {string} formatStr the formatting string to use (based on moment-js)
+     * @returns {string} string representation of the date object
+     * @memberof MiscUtil
+     */
+    static formatDateWithStr(date, formatStr) {
+        const mDate = moment(date);
+
+        // rounding tokens look like " _r_ year,%2,+1 minute%3"
+        // which would round down to every even year and add 1 and every third minute
+        const roundDelineator = " _r_ ";
+        const pieces = formatStr.split(roundDelineator);
+        const finalFormat = pieces[0];
+        const roundStr = pieces[1];
+
+        if (roundStr) {
+            const roundPieces = roundStr.split(" ");
+            for (const r of roundPieces) {
+                const p = r.split(",");
+                const scale = p[0];
+                const ops = p.slice(1);
+
+                let val = parseInt(mDate.get(scale));
+                if (scale.indexOf("month") !== -1) {
+                    val += 1; // special case moment counts months 0 - 11
+                }
+
+                // offset operations will be bundled together
+                if (ops.length > 0) {
+                    let targetVal = val;
+                    for (const opStr of ops) {
+                        const opRe = /(?<op>\D{1})(?<factor>\d+)/gi;
+                        if (opStr.match(opRe)) {
+                            for (const match of opStr.matchAll(opRe)) {
+                                const { op, factor } = match.groups;
+                                const factorInt = parseInt(factor);
+                                if (op === "%") {
+                                    targetVal -= targetVal % factorInt;
+                                } else if (op === "+") {
+                                    targetVal += factorInt;
+                                } else if (op === "-") {
+                                    targetVal -= factorInt;
+                                }
+                            }
+                        }
+                    }
+
+                    const offset = targetVal - val;
+                    mDate.add(offset, scale);
+                }
+            }
+        }
+
+        const finalStr = mDate.format(finalFormat);
+        return finalStr;
     }
 }

@@ -5,7 +5,6 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import moment from "moment";
 import Ol_Map from "ol/Map";
 import Ol_View from "ol/View";
 import Ol_Layer_Vector from "ol/layer/Vector";
@@ -429,7 +428,7 @@ export default class MapWrapperOpenlayers extends MapWrapper {
             mapLayer.set("_layerId", layer.get("id"));
             mapLayer.set("_layerType", layer.get("type"));
             mapLayer.set("_layerCacheHash", this.getCacheHash(layer));
-            mapLayer.set("_layerTime", moment(this.mapDate).format(layer.get("timeFormat")));
+            mapLayer.set("_layerTime", this.getLayerTimeString(layer));
             return true;
         } catch (err) {
             console.warn("Error in MapWrapperOpenlayers.setLayerRefInfo: ", err);
@@ -2655,6 +2654,17 @@ export default class MapWrapperOpenlayers extends MapWrapper {
      * @memberof MapWrapperOpenlayers
      */
     getCacheHash(layer) {
-        return layer.get("id") + moment(this.mapDate).format(layer.get("timeFormat"));
+        return layer.get("id") + this.getLayerTimeString(layer);
+    }
+
+    /**
+     * get the a string representing the current time selection for this layer
+     *
+     * @param {ImmutableJS.Map} layer layer object from map state in redux
+     * @returns {string} string representing the current map date for this layer
+     * @memberof MapWrapperOpenlayers
+     */
+    getLayerTimeString(layer) {
+        return this.miscUtil.formatDateWithStr(this.mapDate, layer.get("timeFormat"));
     }
 }

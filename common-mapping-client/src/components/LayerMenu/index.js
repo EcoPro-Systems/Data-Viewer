@@ -5,4 +5,5 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+export { default as LayerControlContainer } from "components/LayerMenu/LayerControlContainer.js";
 export { default as LayerMenuContainer } from "components/LayerMenu/LayerMenuContainer.js";

@@ -12,7 +12,7 @@ import { ContextMenuTrigger } from "react-contextmenu";
 import { bindActionCreators } from "redux";
 import * as appStrings from "_core/constants/appStrings";
 import * as mapActions from "_core/actions/mapActions";
-import MapContainer2D from "_core/components/Map/MapContainer2D";
+import MapContainer2D from "components/Map/MapContainer2D";
 import MiscUtil from "_core/utils/MiscUtil";
 import styles from "_core/components/Map/MapContainer.scss";
 

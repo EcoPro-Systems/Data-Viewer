@@ -1,0 +1,1 @@
+export const SET_LAYER_LOADING = "SET_LAYER_LOADING";

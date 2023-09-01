@@ -146,7 +146,7 @@ APPLICATION_CONFIG = {
                                 color: "biomass",
                                 minScale: 0,
                                 maxScale: 20000,
-                                minSize: 5,
+                                minSize: 7,
                                 maxSize: 30,
                                 clusterRange: 40,
                                 palette: "YlOrRd",
@@ -161,7 +161,7 @@ APPLICATION_CONFIG = {
                         updateParameters: {
                             time: true,
                         },
-                        timeFormat: "YYYYMM",
+                        timeFormat: "YYYYMM _r_ month,+1,%3,-1",
                         urlFunctions: {
                             openlayers: "kvpTimeParam",
                             cesium: "kvpTimeParam",
@@ -175,11 +175,11 @@ APPLICATION_CONFIG = {
                                 },
                                 altProps: [
                                     {
-                                        label: "Biomass",
+                                        label: "Biomass (wet Kg)",
                                         value: "biomass",
                                     },
                                     {
-                                        label: "Area",
+                                        label: "Area (m^2)",
                                         value: "area",
                                     },
                                 ],
