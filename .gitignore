@@ -8,6 +8,7 @@ README
 
 # ignore dynamic directories
 geoserver_data/
+geoserver_data.tar.gz
 common-mapping-client_build/
 nginx_logs/
 
