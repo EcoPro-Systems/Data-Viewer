@@ -3,8 +3,16 @@
 *.tif
 *.bak
 *.orig
+*.pyc
 README
 
-# ignore cached tiles
+# ignore dynamic directories
 geoserver_data/
-common-mapping-client_build
+common-mapping-client_build/
+nginx_logs/
+
+pyvenv
+.vscode
+
+__pycache__/
+*.egg-info

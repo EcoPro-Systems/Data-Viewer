@@ -1,7 +1,7 @@
 version: "3"
 services:
     backend:
-        image: "docker.osgeo.org/geoserver:2.22.0"
+        image: "docker.osgeo.org/geoserver:2.24.x"
         expose:
             - "8080"
         ports:
@@ -21,6 +21,7 @@ services:
         build: "./common-mapping-client"
         volumes:
             - "ecopro_app:/usr/share/nginx/html/app:rw"
+            - "./nginx_logs:/var/log/nginx:rw"
         ports:
             - "80:80"
         restart: always

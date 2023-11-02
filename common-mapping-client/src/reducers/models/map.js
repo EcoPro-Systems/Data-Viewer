@@ -23,5 +23,6 @@ export const mapState = mapStateCore.mergeDeep(
 export const layerModel = layerModelCore.mergeDeep(
     Immutable.fromJS({
         group: appStrings.LAYER_GROUP_NONE,
+        isLoading: false,
     })
 );

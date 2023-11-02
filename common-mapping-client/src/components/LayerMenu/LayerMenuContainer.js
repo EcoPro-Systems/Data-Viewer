@@ -17,7 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import * as appStringsCore from "_core/constants/appStrings";
 import * as appStrings from "constants/appStrings";
 import * as mapActions from "_core/actions/mapActions";
-import { LayerControlContainer } from "_core/components/LayerMenu";
+import { LayerControlContainer } from "components/LayerMenu";
 import { IconButtonSmall, EnhancedTooltip } from "_core/components/Reusables";
 import MiscUtil from "_core/utils/MiscUtil";
 import stylesCore from "_core/components/LayerMenu/LayerMenuContainer.scss";

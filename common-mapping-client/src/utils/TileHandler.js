@@ -2,6 +2,7 @@ import Immutable from "immutable";
 import moment from "moment";
 import TileHandlerCore from "_core/utils/TileHandler";
 import * as appStrings from "constants/appStrings";
+import MiscUtil from "_core/utils/MiscUtil";
 
 export default class TileHandler extends TileHandlerCore {
     static getUrlFunction(functionString = "") {
@@ -59,7 +60,7 @@ export default class TileHandler extends TileHandlerCore {
     static _kvpTimeParamUrlWms(options) {
         let { url, layer, mapDate } = options;
 
-        let timeStr = moment(mapDate).format(layer.get("timeFormat"));
+        let timeStr = MiscUtil.formatDateWithStr(mapDate, layer.get("timeFormat"));
         if (typeof timeStr !== "undefined") {
             if (url.indexOf("{") >= 0) {
                 url = url.replace("{Time}", timeStr);
@@ -116,6 +117,7 @@ export default class TileHandler extends TileHandlerCore {
                     tile._imgData = options.imgData;
                     tile.state = STATE_LOADED;
                     mapLayer.changed();
+                    mapLayer.getSource().changed();
                 })
                 .catch((err) => {
                     console.warn("Error in TileHandler_Extended._dataExtraction_OL:", err);

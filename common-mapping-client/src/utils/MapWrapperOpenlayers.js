@@ -7,12 +7,22 @@ import Ol_Style_Fill from "ol/style/Fill";
 import Ol_Style_Circle from "ol/style/Circle";
 import Ol_Layer_Vector from "ol/layer/Vector";
 import Ol_Source_Cluster from "ol/source/Cluster";
+import { unByKey } from "ol/Observable";
 import MapWrapperOpenlayersCore from "_core/utils/MapWrapperOpenlayers";
 import * as appStringsCore from "_core/constants/appStrings";
 import * as appStrings from "constants/appStrings";
 import MapUtil from "utils/MapUtil";
 import TileHandler from "utils/TileHandler";
 import appConfig from "constants/appConfig";
+
+const TILE_STATE_IDLE = 0; // loading states found in ol.tile.js
+const TILE_STATE_LOADING = 1;
+const TILE_STATE_LOADED = 2;
+const TILE_STATE_ERROR = 3;
+const TILE_STATE_EMPTY = 4;
+const TILE_STATE_ABORT = 5;
+const NO_LOAD_STATES = [TILE_STATE_LOADING, TILE_STATE_LOADED, TILE_STATE_ERROR, TILE_STATE_EMPTY];
+const LOAD_COMPLETE_STATES = [TILE_STATE_LOADED, TILE_STATE_ERROR, TILE_STATE_EMPTY];
 
 export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
     initStaticClasses(container, options) {
@@ -26,6 +36,16 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
         this.layerLoadCallback = undefined;
     }
 
+    handleLayerLoad(layer, loading, error = false) {
+        // run the call back (if it exists)
+        if (typeof this.layerLoadCallback === "function") {
+            // run async to avoid reducer block
+            window.requestAnimationFrame(() => {
+                this.layerLoadCallback({ layer, loading, error });
+            });
+        }
+    }
+
     setLayerLoadCallback(callback) {
         if (typeof callback === "function") {
             this.layerLoadCallback = callback;
@@ -33,6 +53,10 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
     }
 
     createLayer(layer, date, fromCache = true) {
+        let mapLayer;
+
+        this.handleLayerLoad(layer.get("id"), true);
+
         // pull from cache if possible
         let cacheHash = this.getCacheHash(layer, date);
         if (fromCache && this.layerCache.get(cacheHash)) {
@@ -40,41 +64,31 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
             cachedLayer.setOpacity(layer.get("opacity"));
             cachedLayer.setVisible(layer.get("isActive"));
 
-            if (
-                typeof cachedLayer.getSource === "function" &&
-                cachedLayer.getSource().get("_hasLoaded")
-            ) {
-                // run async to avoid reducer block
-                window.requestAnimationFrame(() => {
-                    // run the call back (if it exists)
-                    if (typeof this.layerLoadCallback === "function") {
-                        this.layerLoadCallback(layer);
-                    }
-                });
-            }
-
-            return cachedLayer;
+            mapLayer = cachedLayer;
+        } else {
+            mapLayer = MapWrapperOpenlayersCore.prototype.createLayer.call(
+                this,
+                layer,
+                false // we don't want the parent class using the wrong cache key
+            );
         }
 
-        return MapWrapperOpenlayersCore.prototype.createLayer.call(
-            this,
-            layer,
-            false // we don't want the parent class using the wrong cache key
-        );
+        // add load tracking
+        if (mapLayer && typeof mapLayer.getSource === "function") {
+            if (mapLayer.getSource().get("_hasLoaded")) {
+                this.handleLayerLoad(layer.get("id"), false);
+            } else {
+                this.addLayerLoadTracker(mapLayer);
+            }
+        }
+
+        return mapLayer;
     }
 
     // TODO - different vector layer types/styling
     createVectorLayer(layer, fromCache = true) {
         try {
-            let layerSource = this.createLayerSource(layer, {
-                url: layer.get("url"),
-            });
-
-            if (layer.get("clusterVector")) {
-                const distance =
-                    layer.getIn(["mappingOptions", "displayProps", "clusterRange"]) || 5;
-                layerSource = new Ol_Source_Cluster({ source: layerSource, distance });
-            }
+            this.handleLayerLoad(layer.get("id"), true);
 
             const defFill = new Ol_Style_Fill({
                 color: "rgba(255,255,255,0)",
@@ -161,13 +175,54 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                 });
             }
 
-            return new Ol_Layer_Vector({
+            let layerSource = this.createLayerSource(layer, {
+                url: layer.get("url"),
+            });
+
+            if (layer.get("clusterVector")) {
+                const distance =
+                    layer.getIn(["mappingOptions", "displayProps", "clusterRange"]) || 5;
+                layerSource = new Ol_Source_Cluster({ source: layerSource, distance });
+            }
+
+            const mapLayer = new Ol_Layer_Vector({
                 source: layerSource,
                 opacity: layer.get("opacity"),
                 visible: layer.get("isActive"),
                 extent: appConfig.DEFAULT_MAP_EXTENT,
                 style,
             });
+
+            // set custom load tracker
+            const vectorSource = layer.get("clusterVector") ? layerSource.getSource() : layerSource;
+            vectorSource.setLoader((extent, resolution, projection) => {
+                layerSource.set("_hasLoaded", false);
+                vectorSource.set("_hasLoaded", false);
+                var url = vectorSource.getUrl();
+                const onError = (err) => {
+                    vectorSource.removeLoadedExtent(extent);
+                    this.handleLayerLoad(layer.get("id"), false, err);
+                };
+                fetch(url)
+                    .then((resp) => {
+                        if (resp.status >= 400) {
+                            onError(new Error("Failed to fetch", url));
+                        } else {
+                            return resp.text();
+                        }
+                    })
+                    .then((text) => {
+                        vectorSource.addFeatures(vectorSource.getFormat().readFeatures(text));
+                        layerSource.set("_hasLoaded", true);
+                        vectorSource.set("_hasLoaded", true);
+                        this.handleLayerLoad(layer.get("id"), false);
+                    })
+                    .catch((err) => {
+                        onError(err);
+                    });
+            });
+
+            return mapLayer;
         } catch (err) {
             console.warn("Error in MapWrapperOpenlayers.createVectorLayer:", err);
             return false;
@@ -280,6 +335,12 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                     if (layer.getIn(["metadata", "hoverDisplayProps"])) {
                         let properties = feature.getProperties();
 
+                        // try to resolve a color
+                        let colorStr = "#000000";
+                        try {
+                            colorStr = mapLayer.getStyle()(feature).getFill().getColor().hex();
+                        } catch (err) {}
+
                         // aggregate values from cluster
                         const clusteredFeatures = feature.get("features");
                         if (clusteredFeatures) {
@@ -303,6 +364,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                             layer: mapLayer.get("_layerId"),
                             properties: properties,
                             coords: coords,
+                            color: colorStr,
                         });
                     }
                 },
@@ -366,6 +428,99 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
 
     getCacheHash(layer, date = false) {
         date = date || this.mapDate;
-        return `${layer.get("id")}_${moment.utc(date).format(layer.get("timeFormat"))}`;
+        return `${layer.get("id")}_${this.miscUtil.formatDateWithStr(
+            this.mapDate,
+            layer.get("timeFormat")
+        )}`;
+    }
+
+    addLayerLoadTracker(mapLayer) {
+        if (mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1) {
+            this.addRasterLayerLoadListeners(mapLayer);
+        }
+    }
+
+    addRasterLayerLoadListeners(mapLayer) {
+        // handle the tile loading complete
+        const loadEvent = () => {
+            const { isLoaded } = this.getLoadingStatus(mapLayer);
+            if (isLoaded) {
+                mapLayer.getSource().set("_hasLoaded", true);
+                this.clearLayerTileListeners(mapLayer);
+            }
+            this.handleLayerLoad(mapLayer.get("_layerRef").get("id"), !isLoaded);
+        };
+
+        // start listening for the tile load events if the source hasn't already loaded
+        let source = mapLayer.getSource();
+        if (!source.get("_hasLoaded")) {
+            if (typeof source.get("_tileLoadEndListener") === "undefined") {
+                source.set(
+                    "_tileLoadEndListener",
+                    source.on("tileloadend", () => loadEvent())
+                );
+            }
+            if (typeof source.get("_tileLoadErrorListener") === "undefined") {
+                source.set(
+                    "_tileLoadErrorListener",
+                    source.on("tileloaderror", () => loadEvent())
+                );
+            }
+            if (typeof source.get("_changeEventListener") === "undefined") {
+                source.set(
+                    "_changeEventListener",
+                    source.on("change", () => loadEvent())
+                );
+            }
+        }
+    }
+
+    clearLayerTileListeners(mapLayer) {
+        unByKey(mapLayer.getSource().get("_tileLoadEndListener"));
+        mapLayer.getSource().unset("_tileLoadEndListener");
+        unByKey(mapLayer.getSource().get("_tileLoadErrorListener"));
+        mapLayer.getSource().unset("_tileLoadErrorListener");
+        unByKey(mapLayer.getSource().get("_changeEventListener"));
+        mapLayer.getSource().unset("_changeEventListener");
+    }
+
+    getLoadingStatus(mapLayer) {
+        if (mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1) {
+            return this.getRasterLayerLoadingStatus(mapLayer);
+        } else if (mapLayer.get("_layerRef").get("handleAs").indexOf("raster") !== -1) {
+            return this.getVectorLayerLoadingStatus(mapLayer);
+        }
+        return {
+            isLoaded: false,
+            tilesTotal: -1,
+            tilesLoaded: -1,
+        };
+    }
+
+    getRasterLayerLoadingStatus(mapLayer) {
+        let source = mapLayer.getSource();
+
+        // to determine if all tiles are loaded, we check if all the expected tiles
+        // are in the tileCache and have a loaded state
+        let tilesTotal = 0;
+        let tilesLoaded = 0;
+        let tileGrid = source.getTileGrid();
+        let extent = this.map.getView().calculateExtent(this.map.getSize());
+        let resolution = this.map.getView().getResolution();
+        let zoom = tileGrid.getZForResolution(resolution);
+        tileGrid.forEachTileCoord(extent, zoom, (tileCoord) => {
+            let tileCoordStr = tileCoord.join("/");
+            if (
+                source.tileCache.containsKey(tileCoordStr) &&
+                LOAD_COMPLETE_STATES.indexOf(source.tileCache.get(tileCoordStr).state) !== -1
+            ) {
+                tilesLoaded++;
+            }
+            tilesTotal++;
+        });
+
+        let isLoaded = tilesTotal === tilesLoaded && tilesTotal !== 0;
+
+        return { isLoaded, ratio: tilesLoaded / tilesTotal };
     }
 }

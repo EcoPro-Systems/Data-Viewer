@@ -10,6 +10,24 @@ then
     mkdir common-mapping-client_build
 fi
 
+if [[ ! -d nginx_logs ]]
+then
+    echo "creating nginx log directory..."
+    mkdir nginx_logs
+fi
+
+if [[ ! -f ./nginx_logs/access.log ]]
+then
+    echo "creating nginx access log..."
+    touch ./nginx_logs/access.log
+fi
+
+if [[ ! -f ./nginx_logs/error.log ]]
+then
+    echo "creating nginx error log..."
+    touch ./nginx_logs/error.log
+fi
+
 if [[ ! -d geoserver_data ]]
 then
     ./scripts/unpack.sh

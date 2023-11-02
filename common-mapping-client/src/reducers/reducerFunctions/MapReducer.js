@@ -104,18 +104,12 @@ export default class MapReducer extends MapReducerCore {
             const { defaultOptions } = action.options;
             newPartials = newPartials.map((partial) => {
                 let mergedPartial = partial;
-                if (defaultOptions.__ALL__) {
-                    mergedPartial = mergedPartial.mergeDeep(defaultOptions.__ALL__);
-                }
-                for (const key in defaultOptions) {
-                    // skip all since we already applied it
-                    if (key !== "__ALL__") {
-                        const re = new RegExp(key, "gi");
-                        if (mergedPartial.get("id").match(re)) {
-                            mergedPartial = mergedPartial.mergeDeep(defaultOptions[key]);
-                        }
+                defaultOptions.forEach((opt) => {
+                    const re = new RegExp(opt.key, "gi");
+                    if (opt.key === "__ALL__" || mergedPartial.get("id").match(re)) {
+                        mergedPartial = mergedPartial.mergeDeep(opt.options);
                     }
-                }
+                });
                 return mergedPartial;
             });
         }
@@ -164,5 +158,19 @@ export default class MapReducer extends MapReducerCore {
             return true;
         });
         return state.setIn(["view", "pixelHoverCoordinate"], pixelCoordinate);
+    }
+
+    static setLayerLoading(state, action) {
+        let actionLayer = action.layer;
+        if (typeof actionLayer === "string") {
+            actionLayer = this.findLayerById(state, actionLayer);
+        }
+        if (typeof actionLayer !== "undefined") {
+            state = state.setIn(
+                ["layers", actionLayer.get("type"), actionLayer.get("id"), "isLoading"],
+                action.isLoading
+            );
+        }
+        return state;
     }
 }

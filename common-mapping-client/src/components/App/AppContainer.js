@@ -101,15 +101,15 @@ export class AppContainer extends Component {
                     // set initial view
                     this.props.setMapView({ extent: appConfig.DEFAULT_BBOX_EXTENT }, true);
 
+                    // signal complete
+                    this.props.completeInitialLoad();
+
                     // activate default/url params
                     if (this.urlParams.length === 0) {
                         this.props.activateDefaultLayers();
                     } else {
                         this.props.runUrlConfig(this.urlParams);
                     }
-
-                    // signal complete
-                    this.props.completeInitialLoad();
 
                     // ReactTooltip needs to be rebuilt to account
                     // for dynamic lists in LayerMenuContainer
