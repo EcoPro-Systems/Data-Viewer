@@ -1,0 +1,2 @@
+[lfs]
+    url = "https://artifactory.jpl.nasa.gov/artifactory/api/lfs/gitlfs-public-local"
