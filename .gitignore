@@ -7,7 +7,6 @@
 README
 
 geoserver_data/
-*.tar.gz
 common-mapping-client_build/
 nginx_logs/
 
