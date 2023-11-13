@@ -25,7 +25,7 @@ def get_args():
         "-o",
         "--output",
         help="The directory to output all the HDF5 and GeoTiff files",
-        default="/Users/fplatt/Workspace/ecopro/geoserver_data/workspaces/user_app/data_files/playground/kelp_conversion",
+        default="./kelp_conversion",
     )
     parser.add_argument(
         "-n",

@@ -28,7 +28,7 @@ setup(
     entry_points={  # Optional
         "console_scripts": [
             "convert_kelp_biomass=convert_kelp_biomass:main",
-            "import_raster_files=import_raster_files:main",
+            "import_directory=import_directory:main",
         ],
     },
 )

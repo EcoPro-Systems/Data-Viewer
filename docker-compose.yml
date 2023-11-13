@@ -13,6 +13,7 @@ services:
             - INSTALL_EXTENSIONS=true
             - SKIP_DEMO_DATA=true
             - STABLE_EXTENSIONS=netcdf,vectortiles,importer
+            - COMMUNITY_EXTENSIONS=cog
             - CORS_ENABLED=true
         deploy:
             restart_policy:

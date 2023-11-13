@@ -112,7 +112,7 @@ APPLICATION_CONFIG = {
 
 
                     {
-                        key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84*",
+                        key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84.*_proc$",
                         options: {
                             isDisabled: true,
                             min: 0,
@@ -132,12 +132,12 @@ APPLICATION_CONFIG = {
                                     openlayers: "kvpTimeParam_wmts",
                                     cesium: "kvpTimeParam_wmts",
                                 },
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84_2014$",
+                        key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84_2014_proc$",
                         options: {
                             isDisabled: false,
                             title: "Tree Mortality Severity (2014 - 2021)",
@@ -163,7 +163,7 @@ APPLICATION_CONFIG = {
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_aet_1980_unco$",
+                        key: "^user_app:bcmv8_aet_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Actual Evapotranspiration",
@@ -175,12 +175,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_cwd_1980_unco$",
+                        key: "^user_app:bcmv8_cwd_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Climatic Water Deficit",
@@ -192,12 +192,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_pck_1980_unco$",
+                        key: "^user_app:bcmv8_pck_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Snow Pack",
@@ -209,12 +209,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_pet_1980_unco$",
+                        key: "^user_app:bcmv8_pet_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Potential Evapotranspiration",
@@ -226,12 +226,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_ppt_1980_unco$",
+                        key: "^user_app:bcmv8_ppt_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Precipitation",
@@ -243,12 +243,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_rch_1980_unco$",
+                        key: "^user_app:bcmv8_rch_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Recharge",
@@ -260,12 +260,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_run_1980_unco$",
+                        key: "^user_app:bcmv8_run_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Runoff",
@@ -277,12 +277,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_str_1980_unco$",
+                        key: "^user_app:bcmv8_str_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Soil Storage",
@@ -294,12 +294,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_tmn_1980_unco$",
+                        key: "^user_app:bcmv8_tmn_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Minimum Temperature",
@@ -311,12 +311,12 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
                     {
-                        key: "^user_app:bcmv8_tmx_1980_unco$",
+                        key: "^user_app:bcmv8_tmx_1980_proc$",
                         options: {
                             isDisabled: false,
                             title: "Maximum Temperature",
@@ -328,13 +328,13 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_unco&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
 
                     {
-                        key: "^user_app:raster_nature_ssp*",
+                        key: "^user_app:raster_nature_ssp.*_proc",
                         options: {
                             min: 2012,
                             max: 2100,
@@ -348,7 +348,7 @@ APPLICATION_CONFIG = {
                     },
 
                     {
-                        key: "^user_app:kelp_*",
+                        key: "^user_app:kelp_.*",
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
