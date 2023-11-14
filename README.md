@@ -2,17 +2,23 @@
 
 Application bundle that includes a Common Mapping Client frontend and GeoServer backend.
 
+### Requirements
+
+- [Docker](https://www.docker.com/) runtime ([Rancher](https://rancherdesktop.io/) should work too)
+- [git-lfs](https://git-lfs.github.com/)
+  - `brew install git-lfs` for MacOS
+
 ### Getting Started
 
-- Make sure you have [git-lfs](https://git-lfs.github.com/) installed
-  - `brew install git-lfs` (or whatever your OS says to do) - adds LFS support to git cli on your machine
-  - `git lfs install` - enables git lfs for your user account
-- Make sure you have a [Docker](https://www.docker.com/) runtime installed ([Rancher](https://rancherdesktop.io/) should work too)
-- Pull down latest GeoServer data bundle from [Artifactory](https://artifactory.jpl.nasa.gov/)
-  - !!!! IN PROGRESS !!!!
-- `./scripts/unpack.sh`
-- `./scripts/start.sh`
+- Enable `git lfs` for your account: `git lfs install --skip-smudge`
+  - Disable the smudge filter to avoid more painful initial clone
+- Clone repo: `git clone git@github.jpl.nasa.gov:EcoPro/Data-Viewer.git`
+- Pull down git lfs artifacts: `git lfs pull`
+- Reinstate the smudge filter: `git lfs install --force`
+- Unpack the GeoServer data bundle: `./scripts/unpack.sh`
+- Start services: `./scripts/start.sh`
   - wait a few minutes for GeoServer to start up
+  - use `-d` to run docker services in detached (in the background)
 - Go to `http://localhost` for the data viewer
 - Go to `http://localhost/geoserver` for the GeoServer admin portal
 
@@ -30,7 +36,7 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
     - Install: `pip install -e .[dev]`
   - Scripts:
     - `convert_kelp_biomass`: Converts NetCDF of Kelp Biomass historical data to a bunch of Shapefiles
-    - `import_raster_files`: Bulk import raster data files into GeoServer
+    - `import_directory`: Bulk import all raster data files (GeoTIFF) or shapefiles in a directory into GeoServer
 
 ### Note on Docker
 
@@ -42,4 +48,4 @@ Once you have run `./scripts/start.sh -d` there should be a new directory presen
 
 ### GeoServer management
 
-The admin username:pass is set as `admin:cmc_geoserver` it is highly advised to change this
+Contact Flynn for the currently configured GeoServer admin password
