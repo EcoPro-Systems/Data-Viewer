@@ -48,6 +48,7 @@ def get_args():
         help="The workspace",
         default="user_app",
     )
+    parser.add_argument("--force", help="Continue despite errors.", action="store_true")
     parser.add_argument(
         "-g",
         "--geoserver",
@@ -76,14 +77,6 @@ def main():
     # get admin password from ENV or args
     user_pass = os.environ.get(args.env_password, args.password)
 
-    # setup geoserver connection
-    geo = Geoserver(args.geoserver, username=args.username, password=user_pass)
-
-    # check if we had success
-    if not geo:
-        print("ERROR: Could not connect to GeoServer")
-        sys.exit(1)
-
     # check input directory
     input_dir = args.input
     if not os.path.isdir(input_dir):
@@ -92,6 +85,14 @@ def main():
 
     dtype = args.type.lower()
     if dtype in ["tiff", "gtiff", "geotiff"]:
+        # setup geoserver connection
+        geo = Geoserver(args.geoserver, username=args.username, password=user_pass)
+
+        # check if we had success
+        if not geo:
+            print("ERROR: Could not connect to GeoServer")
+            sys.exit(1)
+
         # ensure a style is specified
         if args.style is None:
             print("ERROR: No style specified")
@@ -125,13 +126,13 @@ def main():
             sys.exit(1)
 
         dest_dir = os.path.join(gdata_dir, input_basename)
-        if os.path.isdir(dest_dir):
+        if os.path.isdir(dest_dir) and not args.force:
             print(f"ERROR: {dest_dir} already exists")
             sys.exit(1)
 
         # copy the data into GeoServer's area of knowledge
         print("copying data...")
-        copytree(input_dir, dest_dir)
+        copytree(input_dir, dest_dir, dirs_exist_ok=True)
 
         # construct headers/parms for the query
         headers = {
@@ -141,7 +142,7 @@ def main():
             "configure": "all",
         }
         data = f"file:///opt/geoserver_data/data/{args.workspace}/{input_basename}"
-        url = f"http://localhost:8080/geoserver/rest/workspaces/{args.workspace}/datastores/shapefiles/external.shp"
+        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/shapefiles/external.shp"
 
         print("querying geoserver...")
         response = requests.put(
