@@ -1,13 +1,11 @@
 version: "3"
 services:
     backend:
-        image: "docker.osgeo.org/geoserver:2.24.x"
-        expose:
-            - "8080"
+        image: docker.osgeo.org/geoserver:2.24.x
         ports:
-            - "8080:8080"
+            - 8080:8080
         volumes:
-            - "./geoserver_data:/opt/geoserver_data:rw"
+            - ./geoserver_data:/opt/geoserver_data:rw
         environment:
             - ROOT_WEBAPP_REDIRECT=true
             - INSTALL_EXTENSIONS=true
@@ -18,14 +16,21 @@ services:
         deploy:
             restart_policy:
                 condition: on-failure
+    
     frontend:
-        build: "./common-mapping-client"
+        build: ./common-mapping-client
         volumes:
-            - "ecopro_app:/usr/share/nginx/html/app:rw"
-            - "./nginx_logs:/var/log/nginx:rw"
+            - ecopro_app:/usr/share/nginx/html/app:rw
+            - ./nginx_logs:/var/log/nginx:rw
         ports:
-            - "80:80"
+            - 80:80
         restart: always
+    
+    ecoprodev:
+        build: .
+        volumes:
+            - scripts:/ecopro/scripts
+            - datafiles:/datafiles
 
 volumes:
     ecopro_app:
@@ -34,4 +39,16 @@ volumes:
             type: none
             o: bind
             device: ${PWD}/common-mapping-client_build
+    datafiles:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ${PWD}/data_files
+    scripts:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ${PWD}/scripts
             

@@ -1,7 +1,7 @@
 import os
 import sys
 import datetime
-import numpy as np
+import numpy
 import pandas as pd
 import geopandas
 from shapely.geometry import Point
@@ -28,6 +28,30 @@ def get_args():
         default="./kelp_conversion",
     )
     parser.add_argument(
+        "-v",
+        "--vars",
+        help="List of variables to parse from the data file",
+        nargs="+",
+        default=["biomass", "biomass_se", "area", "area_se"],
+    )
+    parser.add_argument(
+        "-p",
+        "--primaryvar",
+        help="Primary variable",
+        default="biomass",
+    )
+    parser.add_argument(
+        "-f",
+        "--fixed",
+        help="Fix the time value",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-s",
+        "--suffix",
+        help="filename kelp_[suffix]_[date]",
+    )
+    parser.add_argument(
         "-n",
         "--nodata",
         help="The no data value",
@@ -36,9 +60,10 @@ def get_args():
     return parser.parse_args()
 
 
-def serial_date_to_string(srl_no):
+def serial_date_to_string(srl_no, fixed_date):
     new_date = datetime.datetime(1970, 1, 1, 0, 0) + datetime.timedelta(srl_no - 1)
-    return new_date.strftime("%Y%m%d")
+    format_str = "%Y%m01" if fixed_date else "%Y%m%d"
+    return new_date.strftime(format_str)
 
 
 def main():
@@ -46,8 +71,10 @@ def main():
 
     input_file = os.path.abspath(args.input)
     output_dir = os.path.abspath(args.output)
-    variable_keys = ["biomass", "biomass_se", "area", "area_se"]
-    primary_var = "biomass"
+    variable_keys = args.vars
+    primary_var = args.primaryvar
+    fixed_date = args.fixed
+    suffix = args.suffix
     no_data_val = args.nodata
 
     if not os.path.isfile(input_file):
@@ -93,7 +120,7 @@ def main():
     for idx in tqdm(range(data_time.shape[0])):
         # get time
         val_time = data_time[idx]
-        time_str = serial_date_to_string(val_time)
+        time_str = serial_date_to_string(val_time, fixed_date)
 
         # construct a data frame
         data_dict = {"longitude": data_lon, "latitude": data_lat}
@@ -115,7 +142,7 @@ def main():
         data_frame.crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
         # construct base output name
-        output_file = os.path.join(output_dir, f"kelp_{time_str}")
+        output_file = os.path.join(output_dir, f"kelp_{suffix}_{time_str}")
 
         # dump shapefile
         data_frame.to_file(f"{output_file}.shp", driver="ESRI Shapefile")

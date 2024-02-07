@@ -28,15 +28,6 @@ export class AppButtons extends Component {
 
         return (
             <div className={rootClasses} {...other}>
-                <EnhancedTooltip title="Help" placement="bottom" className={styles.btnWrapper}>
-                    <IconButtonSmall
-                        color="inherit"
-                        className={styles.btn}
-                        onClick={() => appActions.setHelpOpen(true)}
-                    >
-                        <HelpIcon />
-                    </IconButtonSmall>
-                </EnhancedTooltip>
                 <EnhancedTooltip title="Share" placement="bottom" className={styles.btnWrapper}>
                     <IconButtonSmall
                         color="inherit"
@@ -44,15 +35,6 @@ export class AppButtons extends Component {
                         onClick={() => appActions.setShareOpen(true)}
                     >
                         <ShareIcon />
-                    </IconButtonSmall>
-                </EnhancedTooltip>
-                <EnhancedTooltip title="Settings" placement="bottom" className={styles.btnWrapper}>
-                    <IconButtonSmall
-                        color="inherit"
-                        className={styles.btn}
-                        onClick={() => appActions.setSettingsOpen(true)}
-                    >
-                        <SettingsIcon />
                     </IconButtonSmall>
                 </EnhancedTooltip>
                 <EnhancedTooltip

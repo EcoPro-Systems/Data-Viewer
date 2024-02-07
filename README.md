@@ -37,7 +37,10 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
   - Scripts:
     - `convert_kelp_biomass`: Converts NetCDF of Kelp Biomass historical data to a bunch of Shapefiles
     - `import_directory`: Bulk import all raster data files (GeoTIFF) or shapefiles in a directory into GeoServer
-
+- Docker image for python
+  - GDAL can be unpredictably upgraded and suddenly all of the versions won't match on MacOS, so use Docker instead
+  - `docker compose build ecoprodev`
+  - `docker compose run ecoprodev`
 ### Note on Docker
 
 Docker can tend to get clogged up with cached layers, especially if one is repeatedly stopping/rebuilding/starting these containers. These out of date containers and image layers can lead to some unreliability with the GeoServer backend. As such, it is recommended to run `docker system prune` regularly to keep this cruft from interfering. This issue has been noted particularly on Apple M1 systems.

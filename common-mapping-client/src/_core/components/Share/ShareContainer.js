@@ -227,42 +227,6 @@ export class ShareContainer extends Component {
                         className={styles.permalink}
                         onClick={() => this.focusTextArea()}
                     />
-                    <div className={styles.buttons}>
-                        <Grid container spacing={0}>
-                            <Grid item xs>
-                                <Fab
-                                    style={{ color: "white", background: "#505050" }}
-                                    onClick={() => this.shareEmail(shareUrl)}
-                                >
-                                    <Email />
-                                </Fab>
-                            </Grid>
-                            <Grid item xs>
-                                <Fab
-                                    style={{ color: "white", background: "#3B5998" }}
-                                    onClick={() => this.shareFacebook(shareUrl)}
-                                >
-                                    <Facebook />
-                                </Fab>
-                            </Grid>
-                            <Grid item xs>
-                                <Fab
-                                    style={{ color: "white", background: "#55ACEE" }}
-                                    onClick={() => this.shareTwitter(shareUrl)}
-                                >
-                                    <Twitter />
-                                </Fab>
-                            </Grid>
-                            <Grid item xs>
-                                <Fab
-                                    style={{ color: "white", background: "#DD4B39" }}
-                                    onClick={() => this.shareReddit(shareUrl)}
-                                >
-                                    <Reddit />
-                                </Fab>
-                            </Grid>
-                        </Grid>
-                    </div>
                 </div>
             </ModalMenu>
         );

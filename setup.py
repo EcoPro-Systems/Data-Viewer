@@ -11,14 +11,14 @@ setup(
     packages=find_packages(),
     python_requires=">=3.8, <4",
     install_requires=[
-        "GDAL == 3.7.2",
-        "geoserver-rest == 2.5.1",
+        "numpy == 1.26.3",
         "matplotlib == 3.*",
         "pandas == 2.*",
-        "numpy == 1.24.2",
         "tqdm == 4.*",
         "requests == 2.*",
         "geopandas",
+        "gdal == 3.7.2",
+        "geoserver-rest == 2.5.1",
     ],
     extras_require={  # Optional
         "dev": [
