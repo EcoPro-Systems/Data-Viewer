@@ -40,16 +40,18 @@ def get_args():
         help="Primary variable",
         default="biomass",
     )
-    parser.add_argument(
-        "-f",
-        "--fixed",
-        help="Fix the time value",
-        action="store_true"
-    )
+    parser.add_argument("-f", "--fixed", help="Fix the time value", action="store_true")
     parser.add_argument(
         "-s",
         "--suffix",
-        help="filename kelp_[suffix]_[date]",
+        help="Filename: kelp_[suffix]_[date]",
+    )
+    parser.add_argument(
+        "-l",
+        "--limit",
+        help="Limit files to this amount. -1 for all time slices",
+        type=int,
+        default=-1,
     )
     parser.add_argument(
         "-n",
@@ -75,6 +77,7 @@ def main():
     primary_var = args.primaryvar
     fixed_date = args.fixed
     suffix = args.suffix
+    limit = args.limit
     no_data_val = args.nodata
 
     if not os.path.isfile(input_file):
@@ -117,7 +120,8 @@ def main():
 
     # iterate through the variable, assume its shape is (time,station)
     # for idx in tqdm(range(1)):
-    for idx in tqdm(range(data_time.shape[0])):
+    max_iter = limit if limit > -1 else data_time.shape[0]
+    for idx in tqdm(range(max_iter)):
         # get time
         val_time = data_time[idx]
         time_str = serial_date_to_string(val_time, fixed_date)
