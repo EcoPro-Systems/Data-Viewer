@@ -142,7 +142,7 @@ def main():
             "configure": "all",
         }
         data = f"file:///opt/geoserver_data/data/{args.workspace}/{input_basename}"
-        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/shapefiles/external.shp"
+        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{input_basename}/external.shp"
 
         print("querying geoserver...")
         response = requests.put(

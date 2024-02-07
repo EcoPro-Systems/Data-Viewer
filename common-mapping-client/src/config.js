@@ -348,7 +348,7 @@ APPLICATION_CONFIG = {
                     },
 
                     {
-                        key: "^user_app:kelp_.*",
+                        key: "^user_app:kelp_[0-9]{8}",
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
@@ -409,6 +409,66 @@ APPLICATION_CONFIG = {
                             group: "Kelp Mortality",
                         },
                     },
+
+
+                    {
+                        key: "^user_app:kelp_predict_[0-9]{8}",
+                        options: {
+                            isDisabled: true,
+                            handleAs: "vector_geojson",
+                            url: "http://localhost/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_predict_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            clusterVector: true,
+                            mappingOptions: {
+                                displayProps: {
+                                    color: "biomass",
+                                    minScale: 0,
+                                    maxScale: 20000,
+                                    minSize: 7,
+                                    maxSize: 30,
+                                    clusterRange: 40,
+                                    palette: "YlOrRd",
+                                },
+                            },
+                            min: 0,
+                            max: 20000,
+                            palette: {
+                                name: "YlOrRd",
+                                handleAs: "dynamic",
+                            },
+                            updateParameters: {
+                                time: true,
+                            },
+                            timeFormat: "YYYYMM _r_ month,+1,%3,-1",
+                            urlFunctions: {
+                                openlayers: "kvpTimeParam",
+                                cesium: "kvpTimeParam",
+                            },
+                            units: "Kg",
+                            metadata: {
+                                hoverDisplayProps: {
+                                    location: {
+                                        lat: "latitude",
+                                        lon: "longitude",
+                                    },
+                                    altProps: [
+                                        {
+                                            label: "Biomass (wet Kg)",
+                                            value: "biomass",
+                                        }
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                    {
+                        key: "user_app:kelp_predict_20010814",
+                        options: {
+                            isDisabled: false,
+                            title: "Kelp Biomass Predict",
+                            group: "Kelp Mortality",
+                        },
+                    },
+
                 ],
             },
             {

@@ -17,7 +17,7 @@ setup(
         "tqdm == 4.*",
         "requests == 2.*",
         "geopandas",
-        "gdal == 3.7.2",
+        # "gdal == 3.7.2",
         "geoserver-rest == 2.5.1",
     ],
     extras_require={  # Optional
