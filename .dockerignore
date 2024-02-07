@@ -1,0 +1,10 @@
+
+**/.vscode/
+**/.git/
+**/common-mapping-client/
+**/common-mapping-client_build/
+**/data_files/
+**/geoserver_data/
+**/nginx_logs/
+**/pyvenv/
+**/geoserver_data.tar.gz
