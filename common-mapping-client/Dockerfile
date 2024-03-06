@@ -10,7 +10,7 @@ RUN yarn install
 RUN yarn build
 
 # start new stage for deployment
-FROM nginx:1.20.1 AS deploy-stage
+FROM nginx:1.24 AS deploy-stage
 
 # setup destination
 RUN mkdir -p /usr/share/nginx/html/app

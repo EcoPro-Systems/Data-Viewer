@@ -32,3 +32,6 @@ if [[ ! -d geoserver_data ]]
 then
     ./scripts/unpack.sh
 fi
+
+# Create the external volume for caddy
+docker volume create ecopro_caddy_data

@@ -1,0 +1,4 @@
+ecopro-visualization.org {
+    reverse_proxy /geoserver/* backend:8080
+    reverse_proxy frontend:8081
+}

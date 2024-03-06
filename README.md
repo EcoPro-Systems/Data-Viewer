@@ -41,6 +41,7 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
   - GDAL can be unpredictably upgraded and suddenly all of the versions won't match on MacOS, so use Docker instead
   - `docker compose build ecoprodev`
   - `docker compose run ecoprodev`
+
 ### Note on Docker
 
 Docker can tend to get clogged up with cached layers, especially if one is repeatedly stopping/rebuilding/starting these containers. These out of date containers and image layers can lead to some unreliability with the GeoServer backend. As such, it is recommended to run `docker system prune` regularly to keep this cruft from interfering. This issue has been noted particularly on Apple M1 systems.
@@ -52,3 +53,7 @@ Once you have run `./scripts/start.sh -d` there should be a new directory presen
 ### GeoServer management
 
 Contact Flynn for the currently configured GeoServer admin password
+
+### Sync with Server
+
+`rsync -rav --exclude-from=ecopro/.rsyncignore ecopro fplatt@52.39.41.101:~/transfer`

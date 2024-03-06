@@ -7,4 +7,5 @@
 **/geoserver_data/
 **/nginx_logs/
 **/pyvenv/
+**/docker-compose.yml
 **/geoserver_data.tar.gz

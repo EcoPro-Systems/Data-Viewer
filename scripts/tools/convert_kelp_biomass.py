@@ -40,7 +40,9 @@ def get_args():
         help="Primary variable",
         default="biomass",
     )
-    parser.add_argument("-f", "--fixed", help="Fix the time value", action="store_true")
+    parser.add_argument(
+        "-f", "--fixed", help="Fix the day value to a specified string", default=None
+    )
     parser.add_argument(
         "-s",
         "--suffix",
@@ -64,7 +66,7 @@ def get_args():
 
 def serial_date_to_string(srl_no, fixed_date):
     new_date = datetime.datetime(1970, 1, 1, 0, 0) + datetime.timedelta(srl_no - 1)
-    format_str = "%Y%m01" if fixed_date else "%Y%m%d"
+    format_str = f"%Y%m{fixed_date}" if fixed_date else "%Y%m%d"
     return new_date.strftime(format_str)
 
 

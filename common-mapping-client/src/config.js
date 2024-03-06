@@ -89,8 +89,7 @@ APPLICATION_CONFIG = {
                 type: "wmts/xml",
             },
             {
-                url: "//localhost/geoserver/gwc/service/wmts?REQUEST=GetCapabilities",
-                // url: "/geoserver/gwc/service/wmts?REQUEST=GetCapabilities",
+                url: "/geoserver/gwc/service/wmts?REQUEST=GetCapabilities",
                 type: "wmts/xml",
                 defaultOptions: [
                     {
@@ -132,7 +131,7 @@ APPLICATION_CONFIG = {
                                     openlayers: "kvpTimeParam_wmts",
                                     cesium: "kvpTimeParam_wmts",
                                 },
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -175,7 +174,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -192,7 +191,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -209,7 +208,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -226,7 +225,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -243,7 +242,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -260,7 +259,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -277,7 +276,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -294,7 +293,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -311,7 +310,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -328,7 +327,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "//localhost/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -352,7 +351,7 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
-                            url: "http://localhost/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            url: "/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
                             clusterVector: true,
                             mappingOptions: {
                                 displayProps: {
@@ -416,7 +415,7 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
-                            url: "http://localhost/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_predict_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            url: "/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_predict_{Time}14&outputFormat=application/json&exceptions=application/json",
                             clusterVector: true,
                             mappingOptions: {
                                 displayProps: {

@@ -16,3 +16,4 @@ geoserver_data/
 data_files/
 common-mapping-client_build/
 nginx_logs/
+certs/
