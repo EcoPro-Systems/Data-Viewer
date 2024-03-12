@@ -4,6 +4,7 @@ import datetime
 import numpy
 import pandas as pd
 import geopandas
+from time import sleep
 from shapely.geometry import Point
 from osgeo import gdal
 import argparse
@@ -35,28 +36,34 @@ def get_args():
         default=["biomass", "biomass_se", "area", "area_se"],
     )
     parser.add_argument(
-        "-p",
         "--primaryvar",
         help="Primary variable",
         default="biomass",
     )
     parser.add_argument(
-        "-f", "--fixed", help="Fix the day value to a specified string", default=None
+        "--fixed", help="Fix the day value to a specified string", default=None
     )
     parser.add_argument(
-        "-s",
         "--suffix",
         help="Filename: kelp_[suffix]_[date]",
     )
     parser.add_argument(
-        "-l",
         "--limit",
         help="Limit files to this amount. -1 for all time slices",
         type=int,
         default=-1,
     )
     parser.add_argument(
-        "-n",
+        "--start",
+        help="The earliest time to include",
+        type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d"),
+    )
+    parser.add_argument(
+        "--end",
+        help="The latest time to include",
+        type=lambda s: datetime.datetime.strptime(s, "%Y-%m-%d"),
+    )
+    parser.add_argument(
         "--nodata",
         help="The no data value",
         default=-1,
@@ -67,7 +74,7 @@ def get_args():
 def serial_date_to_string(srl_no, fixed_date):
     new_date = datetime.datetime(1970, 1, 1, 0, 0) + datetime.timedelta(srl_no - 1)
     format_str = f"%Y%m{fixed_date}" if fixed_date else "%Y%m%d"
-    return new_date.strftime(format_str)
+    return (new_date.strftime(format_str), new_date)
 
 
 def main():
@@ -80,6 +87,8 @@ def main():
     fixed_date = args.fixed
     suffix = args.suffix
     limit = args.limit
+    start_date = args.start
+    end_date = args.end
     no_data_val = args.nodata
 
     if not os.path.isfile(input_file):
@@ -126,7 +135,10 @@ def main():
     for idx in tqdm(range(max_iter)):
         # get time
         val_time = data_time[idx]
-        time_str = serial_date_to_string(val_time, fixed_date)
+        (time_str, date) = serial_date_to_string(val_time, fixed_date)
+        if (start_date and date < start_date) or (end_date and date > end_date):
+            sleep(0.1)
+            continue
 
         # construct a data frame
         data_dict = {"longitude": data_lon, "latitude": data_lat}
