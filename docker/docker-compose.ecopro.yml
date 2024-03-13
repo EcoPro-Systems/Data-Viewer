@@ -11,6 +11,7 @@ services:
             - ${PWD}/geoserver_data:/opt/geoserver_data:rw
         environment:
             - ROOT_WEBAPP_REDIRECT=true
+            - PROXY_BASE_URL=https://ecopro-visualization.org/geoserver/
             - INSTALL_EXTENSIONS=true
             - SKIP_DEMO_DATA=true
             - STABLE_EXTENSIONS=netcdf,vectortiles,importer
