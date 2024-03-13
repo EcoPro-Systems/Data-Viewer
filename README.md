@@ -39,8 +39,8 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
     - `import_directory`: Bulk import all raster data files (GeoTIFF) or shapefiles in a directory into GeoServer
 - Docker image for python
   - GDAL can be unpredictably upgraded and suddenly all of the versions won't match on MacOS, so use Docker instead
-  - `docker compose build ecoprodev`
-  - `docker compose run ecoprodev`
+  - `docker compose -f docker/docker-compose.dev.yml build ecoprodev`
+  - `docker compose -f docker/docker-compose.dev.yml run ecoprodev`
 
 ### Note on Docker
 

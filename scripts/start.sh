@@ -12,4 +12,4 @@ sleep 3 # help the system settle down
 
 # Start the stack
 echo "starting services..."
-docker compose up $1
+docker compose -f docker/docker-compose.ecopro.yml up $1
