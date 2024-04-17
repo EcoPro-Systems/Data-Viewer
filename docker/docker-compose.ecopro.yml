@@ -3,23 +3,23 @@ version: "3"
 services:
     backend:
         image: docker.osgeo.org/geoserver:2.24.x
+        env_file:
+             - path: ${PWD}/docker/.env
         networks:
             - ecopro_net
         expose:
             - 8080
         volumes:
-            - ${PWD}/geoserver_data:/opt/geoserver_data:rw
+            - ${ECOPRO_GEOSERVER_DATA_DIR}:/opt/geoserver_data:rw
         environment:
             - ROOT_WEBAPP_REDIRECT=true
             - PROXY_BASE_URL=https://ecopro-visualization.org/geoserver/
+            - GEOSERVER_CSRF_WHITELIST=ecopro-visualization.org
             - INSTALL_EXTENSIONS=true
             - SKIP_DEMO_DATA=true
-            - STABLE_EXTENSIONS=netcdf,vectortiles,importer
-            - COMMUNITY_EXTENSIONS=cog
+            - STABLE_EXTENSIONS=wps,netcdf,vectortiles,importer
+            - COMMUNITY_EXTENSIONS=mbtiles-store,mbtiles,cog
             - CORS_ENABLED=true
-        deploy:
-            restart_policy:
-                condition: on-failure
     
     frontend:
         build: ${PWD}/common-mapping-client
@@ -28,13 +28,10 @@ services:
         expose:
             - 8081
         volumes:
-            - ecopro_app:/usr/share/nginx/html/app:rw
             - ${PWD}/nginx_logs:/var/log/nginx:rw
-        restart: always
 
     proxy:
         image: caddy:2.7.6-alpine
-        restart: unless-stopped
         cap_add:
             - NET_ADMIN
         networks:
@@ -54,12 +51,6 @@ networks:
     driver: 'bridge'
 
 volumes:
-    ecopro_app:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: ${PWD}/common-mapping-client_build
     ecopro_caddy_data:
         external: true
     ecopro_caddy_config:

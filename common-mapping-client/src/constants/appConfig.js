@@ -30,6 +30,7 @@ const APP_CONFIG = Immutable.fromJS({
     MAX_ZOOM: undefined,
     MIN_ZOOM: undefined,
     DEFAULT_DATE: moment("2014-01-01", "YYYY-MM-DD").toDate(),
+    MAX_DATE: moment("2050-12-31", "YYYY-MM-DD").toDate(),
 });
 
 const isList = Immutable.List.isList;

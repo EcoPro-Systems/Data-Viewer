@@ -2,6 +2,7 @@ import os
 import sys
 import datetime
 import numpy
+import uuid
 import pandas as pd
 import geopandas
 from time import sleep
@@ -25,8 +26,7 @@ def get_args():
     parser.add_argument(
         "-o",
         "--output",
-        help="The directory to output all the HDF5 and GeoTiff files",
-        default="./kelp_conversion",
+        help="The directory to output all the files",
     )
     parser.add_argument(
         "-v",
@@ -39,6 +39,12 @@ def get_args():
         "--primaryvar",
         help="Primary variable",
         default="biomass",
+    )
+    parser.add_argument(
+        "--format",
+        help="Output format",
+        choices=["shapefile", "shp", "geojson", "json"],
+        default="shp",
     )
     parser.add_argument(
         "--fixed", help="Fix the day value to a specified string", default=None
@@ -81,7 +87,7 @@ def main():
     args = get_args()
 
     input_file = os.path.abspath(args.input)
-    output_dir = os.path.abspath(args.output)
+    output_dir = args.output
     variable_keys = args.vars
     primary_var = args.primaryvar
     fixed_date = args.fixed
@@ -90,6 +96,7 @@ def main():
     start_date = args.start
     end_date = args.end
     no_data_val = args.nodata
+    file_format = args.format
 
     if not os.path.isfile(input_file):
         print("Input file does not exist")
@@ -126,6 +133,10 @@ def main():
     ]
 
     # create output area
+    if not output_dir:
+        short_id = str(uuid.uuid4())[:6]
+        output_dir = f"./kelp_conversion_{short_id}"
+    output_dir = os.path.abspath(output_dir)
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
 
@@ -160,10 +171,17 @@ def main():
         data_frame.crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
         # construct base output name
-        output_file = os.path.join(output_dir, f"kelp_{suffix}_{time_str}")
+        output_file = os.path.join(
+            output_dir, f"kelp_{suffix}_{time_str}" if suffix else f"kelp_{time_str}"
+        )
 
-        # dump shapefile
-        data_frame.to_file(f"{output_file}.shp", driver="ESRI Shapefile")
+        # dump file
+        if file_format in ["shapefile", "shp"]:
+            data_frame.to_file(f"{output_file}.shp", driver="ESRI Shapefile")
+        elif file_format in ["geojson", "json"]:
+            data_frame.to_file(f"{output_file}.geojson", driver="GeoJSON")
+        else:
+            print(f"ERROR: unknown format - {file_format}")
 
 
 if __name__ == "__main__":

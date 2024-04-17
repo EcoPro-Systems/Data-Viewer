@@ -21,7 +21,7 @@ def get_args():
         "-t",
         "--type",
         help="The type of data",
-        choices=["tiff", "geotiff", "gtiff", "shapefile", "shp"],
+        choices=["tiff", "geotiff", "gtiff", "shapefile", "shp", "mbtiles"],
         default="tiff",
     )
     parser.add_argument(
@@ -117,7 +117,7 @@ def main():
                     style_name=args.style,
                     workspace=args.workspace,
                 )
-    elif dtype in ["shapefile", "shp"]:
+    elif dtype in ["shapefile", "shp", "mbtiles"]:
         # construct the data destination and validate it
         input_basename = os.path.basename(input_dir)
         gdata_dir = os.path.join(args.geoserver_data_dir, "data", args.workspace)
@@ -134,6 +134,9 @@ def main():
         print("copying data...")
         copytree(input_dir, dest_dir, dirs_exist_ok=True)
 
+        # get file extension for geoserver query
+        ext = "shp" if dtype in ["shp", "shapefile"] else "mbtiles"
+
         # construct headers/parms for the query
         headers = {
             "Content-type": "text/plain",
@@ -142,7 +145,7 @@ def main():
             "configure": "all",
         }
         data = f"file:///opt/geoserver_data/data/{args.workspace}/{input_basename}"
-        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{input_basename}/external.shp"
+        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{input_basename}/external.{ext}"
 
         print("querying geoserver...")
         response = requests.put(
@@ -155,7 +158,7 @@ def main():
         if not response.status_code == 201:
             print("ERROR: Bad response from server")
             try:
-                print(response.text())
+                print(response.text)
                 response.raise_for_status()
             except:
                 pass

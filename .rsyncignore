@@ -5,9 +5,9 @@ ecopro/certs
 ecopro/common-mapping-client/node_modules
 ecopro/common-mapping-client/assets
 ecopro/common-mapping-client/dist
-ecopro/common-mapping-client_build
 ecopro/data_files
 ecopro/geoserver_data
+ecopro/geoserver_data.tar.gz
 ecopro/nginx_logs
 ecopro/pyvenv
 ecopro/*__pycache__*

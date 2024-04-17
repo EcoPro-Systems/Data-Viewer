@@ -4,12 +4,6 @@
 echo "building..."
 docker compose -f docker/docker-compose.ecopro.yml build
 
-if [[ ! -d common-mapping-client_build ]]
-then
-    echo "creating cmc deployment area..."
-    mkdir common-mapping-client_build
-fi
-
 if [[ ! -d data_files ]]
 then
     echo "creating data_files directory..."
