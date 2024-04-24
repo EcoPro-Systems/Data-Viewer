@@ -13,12 +13,14 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
 - Enable `git lfs` for your account: `git lfs install --skip-smudge`
   - Disable the smudge filter to avoid more painful initial clone
 - Clone repo: `git clone git@github.jpl.nasa.gov:EcoPro/Data-Viewer.git`
-- Pull down git lfs artifacts: `git lfs pull`
-- Reinstate the smudge filter: `git lfs install --force`
-- Unpack the GeoServer data bundle: `./scripts/unpack.sh`
+- For JPL users only
+  - Some pre-built assets are stored for development use
+  - Pull down git lfs artifacts: `git lfs pull`
+  - Reinstate the smudge filter: `git lfs install --force`
+  - Unpack the GeoServer data bundle: `./scripts/unpack.sh`
 - Populate `docker/.env`
-  - `ECOPRO_DATA_DIR` absolute path to the directory where the EcoPro data files are located
-  - `ECOPRO_GEOSERVER_DATA_DIR` absolute path to the geoserver_data directory
+  - `ECOPRO_DATA_DIR` path to the directory where the EcoPro data files are located (usually something like `./data_files`)
+  - `ECOPRO_GEOSERVER_DATA_DIR` path to the geoserver_data directory (usually something like `./geoserver_data`)
 - Start services: `./scripts/start.sh`
   - wait a few minutes for GeoServer to start up
   - use `-d` to run docker services in detached (in the background)
@@ -33,8 +35,8 @@ Application bundle that includes a Common Mapping Client frontend and GeoServer 
 - `start.sh`- builds and starts the docker containers (optional `-d` to start container in the background)
 - `stop.sh`- stops and removes all the running containers
 - Python scripts:
-  - `convert_kelp_biomass`: Converts NetCDF of Kelp Biomass historical data to a bunch of Shapefiles
-  - `import_directory`: Bulk import all raster data files (GeoTIFF) or shapefiles in a directory into GeoServer
+  - `convert_kelp_biomass`: Converts NetCDF of Kelp Biomass data to a bunch of Shapefiles or MBTiles
+  - `import_directory`: Bulk import all raster data files (GeoTIFF, Shapefiles, or MBTiles) in a directory into GeoServer
   - Docker image for python
     - GDAL can be unpredictably upgraded and suddenly all of the versions won't match on MacOS, so use Docker instead
     - `docker compose -f docker/docker-compose.dev.yml build ecoprodev`
