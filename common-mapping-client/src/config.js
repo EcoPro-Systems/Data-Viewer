@@ -905,12 +905,10 @@ APPLICATION_CONFIG = {
                             mappingOptions: {
                                 displayProps: {
                                     color: "biomass",
-                                    colorByAverage: true,
                                     minScale: 0,
                                     maxScale: 20000,
                                     minSize: 7,
                                     maxSize: 30,
-                                    clusterRange: 40,
                                     palette: "YlOrRd",
                                 },
                             },
