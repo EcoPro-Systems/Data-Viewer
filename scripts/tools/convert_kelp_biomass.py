@@ -1,7 +1,9 @@
 import os
 import sys
 import datetime
+import subprocess
 import numpy
+import json
 import uuid
 import pandas as pd
 import geopandas
@@ -43,7 +45,7 @@ def get_args():
     parser.add_argument(
         "--format",
         help="Output format",
-        choices=["shapefile", "shp", "geojson", "json"],
+        choices=["shapefile", "shp", "geojson", "json", "mbtiles"],
         default="shp",
     )
     parser.add_argument(
@@ -74,6 +76,11 @@ def get_args():
         help="The no data value",
         default=-1,
     )
+    parser.add_argument(
+        "--preserve",
+        help="Preserve intermediate files",
+        action="store_true",
+    )
     return parser.parse_args()
 
 
@@ -97,6 +104,7 @@ def main():
     end_date = args.end
     no_data_val = args.nodata
     file_format = args.format
+    preserve = args.preserve
 
     if not os.path.isfile(input_file):
         print("Input file does not exist")
@@ -178,10 +186,53 @@ def main():
         # dump file
         if file_format in ["shapefile", "shp"]:
             data_frame.to_file(f"{output_file}.shp", driver="ESRI Shapefile")
-        elif file_format in ["geojson", "json"]:
+        elif file_format in ["geojson", "json", "mbtiles"]:
             data_frame.to_file(f"{output_file}.geojson", driver="GeoJSON")
+
+            # use tippecanoe to convert to mbtiles
+            if file_format == "mbtiles":
+                accu_args = []
+                # for var_t in var_targets:
+                #     accu_args.append(f"--accumulate-attribute={var_t[0]}:sum")
+                #     accu_args.append(f"--accumulate-attribute={var_t[0]}_mean:mean")
+                # subprocess.run(
+                #     [
+                #         "tippecanoe",
+                #         "-q",
+                #         "-o",
+                #         f"{output_file}.mbtiles",
+                #         "-s",
+                #         "EPSG:4326",
+                #         "-r1",
+                #         "-z17",
+                #         "-kg",
+                #         "--cluster-distance=20",
+                #         *accu_args,
+                #         f"{output_file}.geojson",
+                #     ],
+                #     check=True,
+                # )
+                subprocess.run(
+                    [
+                        "tippecanoe",
+                        "-q",
+                        "-o",
+                        f"{output_file}.mbtiles",
+                        "-s",
+                        "EPSG:4326",
+                        "-zg",
+                        "--maximum-tile-features=250",
+                        "--drop-densest-as-needed",
+                        "--extend-zooms-if-still-dropping",
+                        f"{output_file}.geojson",
+                    ],
+                    check=True,
+                )
+                if not preserve:
+                    os.remove(f"{output_file}.geojson")
         else:
             print(f"ERROR: unknown format - {file_format}")
+    print(f"done.\noutput: {output_dir}")
 
 
 if __name__ == "__main__":

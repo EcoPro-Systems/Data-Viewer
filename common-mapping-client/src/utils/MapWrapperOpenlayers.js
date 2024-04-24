@@ -7,6 +7,15 @@ import Ol_Style_Fill from "ol/style/Fill";
 import Ol_Style_Circle from "ol/style/Circle";
 import Ol_Layer_Vector from "ol/layer/Vector";
 import Ol_Source_Cluster from "ol/source/Cluster";
+import Ol_Layer_VectorTile from "ol/layer/VectorTile";
+import Ol_Source_VectorTile from "ol/source/VectorTile";
+import Ol_Source_TileDebug from "ol/source/TileDebug.js";
+import Ol_Layer_TileLayer from "ol/layer/Tile.js";
+// import Ol_Layer_WebGLPointsLayer from 'ol/layer/WebGLPoints.js';
+import Ol_Tilegrid_WMTS from "ol/tilegrid/WMTS";
+import Ol_Format_MVT from "ol/format/MVT";
+import Ol_Format_GeoJSON from "ol/format/GeoJSON";
+import { createXYZ } from "ol/tilegrid";
 import { unByKey } from "ol/Observable";
 import MapWrapperOpenlayersCore from "_core/utils/MapWrapperOpenlayers";
 import * as appStringsCore from "_core/constants/appStrings";
@@ -66,11 +75,18 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
 
             mapLayer = cachedLayer;
         } else {
-            mapLayer = MapWrapperOpenlayersCore.prototype.createLayer.call(
-                this,
-                layer,
-                false // we don't want the parent class using the wrong cache key
-            );
+            switch (layer.get("handleAs")) {
+                case appStrings.LAYER_VECTOR_TILE_POINTS:
+                    mapLayer = this.createVectorTilePointsLayer(layer, fromCache);
+                    this.setLayerRefInfo(layer, mapLayer);
+                    break;
+                default:
+                    mapLayer = MapWrapperOpenlayersCore.prototype.createLayer.call(
+                        this,
+                        layer,
+                        false // we don't want the parent class using the wrong cache key
+                    );
+            }
         }
 
         // add load tracking
@@ -83,6 +99,113 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
         }
 
         return mapLayer;
+    }
+
+    removeLayer(mapLayer) {
+        mapLayer.getSource().set("_hasLoaded", false);
+        this.clearLayerTileListeners(mapLayer);
+        this.handleLayerLoad(mapLayer.get("_layerRef").get("id"), false);
+
+        return MapWrapperOpenlayersCore.prototype.removeLayer.call(this, mapLayer);
+    }
+
+    // TODO - start here and enable Vector Tile layer for kelp_None_20240214
+    // https://docs.geoserver.org/latest/en/user/extensions/vectortiles/tutorial.html
+    createVectorTilePointsLayer(layer, fromCache = true) {
+        try {
+            const defFill = new Ol_Style_Fill({
+                color: "rgba(255,255,255,0.8)",
+            });
+            const defStroke = new Ol_Style_Stroke({
+                color: "rgba(0,0,0,1)",
+                width: 1.25,
+            });
+            let style;
+            const colorProp = layer.getIn(["mappingOptions", "displayProps", "color"]);
+            if (colorProp) {
+                const colorByAverage = layer.getIn([
+                    "mappingOptions",
+                    "displayProps",
+                    "colorByAverage",
+                ]);
+
+                const maxScale =
+                    layer.getIn(["mappingOptions", "displayProps", "maxScale"]) ||
+                    layer.get("max") ||
+                    100;
+                const minScale =
+                    layer.getIn(["mappingOptions", "displayProps", "minScale"]) ||
+                    layer.get("min") ||
+                    0;
+                const colorScale = chroma
+                    .scale(layer.getIn(["mappingOptions", "displayProps", "palette"]))
+                    .mode("lab")
+                    .correctLightness();
+
+                const styleCache = {};
+                style = (feature, res) => {
+                    const featureProps = feature.getProperties();
+
+                    let colorVal = parseFloat(featureProps[colorProp]);
+                    if (colorByAverage && featureProps["clustered"]) {
+                        const clusterCount = featureProps["point_count"];
+                        colorVal /= clusterCount;
+                    }
+
+                    const colorScaler = (colorVal - minScale) / (maxScale - minScale);
+                    const colorStr = colorScale(colorScaler);
+
+                    // check if we've made a circle this color before
+                    const cachedStyle = styleCache[colorStr];
+                    if (cachedStyle) {
+                        return cachedStyle;
+                    }
+
+                    // make a new style for this color
+                    const newStyle = new Ol_Style({
+                        image: new Ol_Style_Circle({
+                            fill: new Ol_Style_Fill({
+                                color: colorStr,
+                            }),
+                            stroke: defStroke,
+                            radius: 5,
+                        }),
+                    });
+
+                    // cache for later
+                    styleCache[colorStr] = newStyle;
+                    return newStyle;
+                };
+            } else {
+                style = new Ol_Style({
+                    image: new Ol_Style_Circle({
+                        fill: defFill,
+                        stroke: defStroke,
+                        radius: 5,
+                    }),
+                });
+            }
+
+            const sourceOpts = layer.get("mappingOptions").toJS();
+            let layerSource = this.createLayerSource(layer, {
+                ...sourceOpts,
+                url: layer.get("url"),
+            });
+
+            const mapLayer = new Ol_Layer_VectorTile({
+                transition: 0,
+                // renderMode: "image",
+                opacity: layer.get("opacity"),
+                visible: layer.get("isActive"),
+                source: layerSource,
+                style: style,
+            });
+
+            return mapLayer;
+        } catch (err) {
+            console.warn("Error in MapWrapperOpenlayers.createVectorTilePointsLayer:", err);
+            return false;
+        }
     }
 
     // TODO - different vector layer types/styling
@@ -103,6 +226,12 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
             if (sizeProp || colorProp) {
                 sizeProp = sizeProp || colorProp;
                 colorProp = colorProp || sizeProp;
+
+                const colorByAverage = layer.getIn([
+                    "mappingOptions",
+                    "displayProps",
+                    "colorByAverage",
+                ]);
 
                 const maxSize = layer.getIn(["mappingOptions", "displayProps", "maxSize"]) || 20;
                 const minSize = layer.getIn(["mappingOptions", "displayProps", "minSize"]) || 5;
@@ -129,8 +258,10 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                             colorVal += parseFloat(feat.getProperties()[colorProp]);
                         });
                         // get average val
-                        // sizeVal /= clusteredFeatures.length;
-                        colorVal /= clusteredFeatures.length;
+                        if (colorByAverage) {
+                            // sizeVal /= clusteredFeatures.length;
+                            colorVal /= clusteredFeatures.length;
+                        }
                     } else {
                         sizeVal = parseFloat(feature.getProperties()[sizeProp]);
                         colorVal = parseFloat(feature.getProperties()[colorProp]);
@@ -175,7 +306,9 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                 });
             }
 
+            const sourceOpts = layer.get("mappingOptions").toJS();
             let layerSource = this.createLayerSource(layer, {
+                ...sourceOpts,
                 url: layer.get("url"),
             });
 
@@ -226,6 +359,57 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
         } catch (err) {
             console.warn("Error in MapWrapperOpenlayers.createVectorLayer:", err);
             return false;
+        }
+    }
+
+    createVectorTilePointsSource(layer, options) {
+        // customize the layer url if needed
+        if (
+            typeof options.url !== "undefined" &&
+            typeof layer.getIn(["urlFunctions", appStringsCore.MAP_LIB_2D]) !== "undefined"
+        ) {
+            let urlFunction = this.tileHandler.getUrlFunction(
+                layer.getIn(["urlFunctions", appStringsCore.MAP_LIB_2D])
+            );
+            options.url = urlFunction({
+                layer: layer,
+                url: options.url,
+                mapDate: this.mapDate,
+            });
+        }
+
+        const source = new Ol_Source_VectorTile({
+            // format: new Ol_Format_MVT(),
+            format: new Ol_Format_GeoJSON(),
+            tileGrid: options.parsedTileGrid,
+            tileSize: 256,
+            overlaps: false,
+            cacheSize: 12,
+            url: options.url,
+        });
+
+        return source;
+    }
+
+    createLayerSource(layer, options, fromCache = true) {
+        // check cache
+        if (fromCache) {
+            let cacheHash = this.getCacheHash(layer) + "_source";
+            if (this.layerCache.get(cacheHash)) {
+                return this.layerCache.get(cacheHash);
+            }
+        }
+
+        switch (layer.get("handleAs")) {
+            case appStrings.LAYER_VECTOR_TILE_POINTS:
+                return this.createVectorTilePointsSource(layer, options);
+            default:
+                return MapWrapperOpenlayersCore.prototype.createLayerSource.call(
+                    this,
+                    layer,
+                    options,
+                    fromCache
+                );
         }
     }
 
@@ -332,6 +516,7 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
                 pixel,
                 (feature, mapLayer) => {
                     const layer = mapLayer.get("_layerRef");
+                    if (featureData.find((x) => x.layer === mapLayer.get("_layerId"))) return; // only one feature per layer
                     if (layer.getIn(["metadata", "hoverDisplayProps"])) {
                         let properties = feature.getProperties();
 

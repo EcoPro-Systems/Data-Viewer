@@ -117,7 +117,7 @@ def main():
                     style_name=args.style,
                     workspace=args.workspace,
                 )
-    elif dtype in ["shapefile", "shp", "mbtiles"]:
+    elif dtype in ["shapefile", "shp"]:
         # construct the data destination and validate it
         input_basename = os.path.basename(input_dir)
         gdata_dir = os.path.join(args.geoserver_data_dir, "data", args.workspace)
@@ -134,9 +134,6 @@ def main():
         print("copying data...")
         copytree(input_dir, dest_dir, dirs_exist_ok=True)
 
-        # get file extension for geoserver query
-        ext = "shp" if dtype in ["shp", "shapefile"] else "mbtiles"
-
         # construct headers/parms for the query
         headers = {
             "Content-type": "text/plain",
@@ -145,7 +142,7 @@ def main():
             "configure": "all",
         }
         data = f"file:///opt/geoserver_data/data/{args.workspace}/{input_basename}"
-        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{input_basename}/external.{ext}"
+        url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{input_basename}/external.shp"
 
         print("querying geoserver...")
         response = requests.put(
@@ -164,11 +161,59 @@ def main():
                 pass
             finally:
                 sys.exit(1)
-        else:
-            print("done.")
+    elif dtype in ["mbtiles"]:
+        # construct the data destination and validate it
+        input_basename = os.path.basename(input_dir)
+        gdata_dir = os.path.join(args.geoserver_data_dir, "data", args.workspace)
+        if not os.path.isdir(gdata_dir):
+            print(f"ERROR: {gdata_dir} is not a directory")
+            sys.exit(1)
+
+        dest_dir = os.path.join(gdata_dir, input_basename)
+        if os.path.isdir(dest_dir) and not args.force:
+            print(f"ERROR: {dest_dir} already exists")
+            sys.exit(1)
+
+        # copy the data into GeoServer's area of knowledge
+        print("copying data...")
+        copytree(input_dir, dest_dir, dirs_exist_ok=True)
+
+        # construct headers/parms for the query
+        headers = {
+            "Content-type": "text/plain",
+        }
+        params = {
+            "configure": "all",
+        }
+        
+        # run query for each file in the directory
+        for fname in os.listdir(dest_dir):
+            fname_noext = fname.split('.')[0]
+            data = f"file:///opt/geoserver_data/data/{args.workspace}/{input_basename}/{fname}"
+            url = f"{args.geoserver}/rest/workspaces/{args.workspace}/datastores/{fname_noext}/external.mbtiles"
+
+            print("querying geoserver...")
+            response = requests.put(
+                url,
+                params=params,
+                headers=headers,
+                data=data,
+                auth=(args.username, user_pass),
+            )
+            if not response.status_code == 201:
+                print("ERROR: Bad response from server")
+                try:
+                    print(response.text)
+                    response.raise_for_status()
+                except:
+                    pass
+                finally:
+                    sys.exit(1)
     else:
         print("ERROR: Unrecognized type")
         sys.exit(1)
+    
+    print("done.")
 
 
 if __name__ == "__main__":

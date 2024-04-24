@@ -82,6 +82,19 @@ APPLICATION_CONFIG = {
             "default-data/user_app/palettes/tree_mortality_tmn.json",
             "default-data/user_app/palettes/tree_mortality_tmx.json",
             "default-data/user_app/palettes/reef.json",
+            "default-data/user_app/palettes/tree_mortality_pr1.json",
+            "default-data/user_app/palettes/tree_mortality_pr2.json",
+            "default-data/user_app/palettes/tree_mortality_pr3.json",
+            "default-data/user_app/palettes/tree_mortality_pr4.json",
+            "default-data/user_app/palettes/tree_mortality_pr5.json",
+            "default-data/user_app/palettes/tree_mortality_pr6.json",
+            "default-data/user_app/palettes/tree_mortality_pret1.json",
+            "default-data/user_app/palettes/tree_mortality_pret2.json",
+            "default-data/user_app/palettes/tree_mortality_pret3.json",
+            "default-data/user_app/palettes/tree_mortality_pret4.json",
+            "default-data/user_app/palettes/tree_mortality_pret5.json",
+            "default-data/user_app/palettes/tree_mortality_pret6.json",
+            "default-data/user_app/palettes/tree_mortality_spi_spei.json",
         ],
         layerConfig: [
             {
@@ -89,7 +102,7 @@ APPLICATION_CONFIG = {
                 type: "wmts/xml",
             },
             {
-                url: "/geoserver/gwc/service/wmts?REQUEST=GetCapabilities",
+                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?REQUEST=GetCapabilities",
                 type: "wmts/xml",
                 defaultOptions: [
                     {
@@ -108,7 +121,6 @@ APPLICATION_CONFIG = {
                             },
                         },
                     },
-
 
                     {
                         key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84.*_proc$",
@@ -131,7 +143,7 @@ APPLICATION_CONFIG = {
                                     openlayers: "kvpTimeParam_wmts",
                                     cesium: "kvpTimeParam_wmts",
                                 },
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3AgridRefEsri_treeMortalitySN_severity_byYear_wgs84_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -140,6 +152,418 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: false,
                             title: "Tree Mortality Severity (2014 - 2021)",
+                        },
+                    },
+
+                    {
+                        key: "^user_app:bcmv8_PR[0-6]_[0-9]{4}.*",
+                        options: {
+                            isDisabled: true,
+                            units: "mm",
+                            group: [
+                                "Tree Mortality - Sierra Nevada",
+                                "Cumulative Precipitation (2006 - 2021)",
+                            ],
+                            updateParameters: {
+                                time: true,
+                            },
+                            timeFormat: "YYYY",
+                            mappingOptions: {
+                                urlFunctions: {
+                                    openlayers: "kvpTimeParam_wmts",
+                                    cesium: "kvpTimeParam_wmts",
+                                },
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR1_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "1-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 5500,
+                            palette: {
+                                name: "tree_mortality_pr1",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR1_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR2_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "2-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 9000,
+                            palette: {
+                                name: "tree_mortality_pr2",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR2_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR3_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "3-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 12500,
+                            palette: {
+                                name: "tree_mortality_pr3",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR3_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR4_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "4-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 16000,
+                            palette: {
+                                name: "tree_mortality_pr4",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR4_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR5_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "5-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 19500,
+                            palette: {
+                                name: "tree_mortality_pr5",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR5_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PR6_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "6-Year Cumulative Precipitation",
+                            min: 0,
+                            max: 23000,
+                            palette: {
+                                name: "tree_mortality_pr6",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PR6_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+
+                    {
+                        key: "^user_app:bcmv8_PRET[0-6]_[0-9]{4}.*",
+                        options: {
+                            isDisabled: true,
+                            units: "mm",
+                            group: [
+                                "Tree Mortality - Sierra Nevada",
+                                "Cumulative Water Balance (2006 - 2021)",
+                            ],
+                            updateParameters: {
+                                time: true,
+                            },
+                            timeFormat: "YYYY",
+                            mappingOptions: {
+                                urlFunctions: {
+                                    openlayers: "kvpTimeParam_wmts",
+                                    cesium: "kvpTimeParam_wmts",
+                                },
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET1_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "1-Year Cumulative Water Balance",
+                            min: -4000,
+                            max: 4000,
+                            palette: {
+                                name: "tree_mortality_pret1",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET1_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET2_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "2-Year Cumulative Water Balance",
+                            min: -6500,
+                            max: 6500,
+                            palette: {
+                                name: "tree_mortality_pret2",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET2_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET3_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "3-Year Cumulative Water Balance",
+                            min: -9000,
+                            max: 9000,
+                            palette: {
+                                name: "tree_mortality_pret3",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET3_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET4_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "4-Year Cumulative Water Balance",
+                            min: -11500,
+                            max: 11500,
+                            palette: {
+                                name: "tree_mortality_pret4",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET4_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET5_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "5-Year Cumulative Water Balance",
+                            min: -14000,
+                            max: 14000,
+                            palette: {
+                                name: "tree_mortality_pret5",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET5_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_PRET6_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "6-Year Cumulative Water Balance",
+                            min: -16500,
+                            max: 16500,
+                            palette: {
+                                name: "tree_mortality_pret6",
+                                handleAs: "json-fixed",
+                            },
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_PRET6_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+
+                    {
+                        key: "^user_app:bcmv8_SPEI[0-6]_[0-9]{4}.*",
+                        options: {
+                            isDisabled: true,
+                            units: "std dev",
+                            min: -4,
+                            max: 4,
+                            palette: {
+                                name: "tree_mortality_spi_spei",
+                                handleAs: "json-fixed",
+                            },
+                            group: [
+                                "Tree Mortality - Sierra Nevada",
+                                "Standardized Water Balance Index (2006 - 2021)",
+                            ],
+                            updateParameters: {
+                                time: true,
+                            },
+                            timeFormat: "YYYY",
+                            mappingOptions: {
+                                urlFunctions: {
+                                    openlayers: "kvpTimeParam_wmts",
+                                    cesium: "kvpTimeParam_wmts",
+                                },
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI1_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "1-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI1_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI2_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "2-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI2_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI3_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "3-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI3_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI4_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "4-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI4_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI5_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "5-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI5_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPEI6_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "6-Year Standardized Water Balance Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPEI6_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+
+                    {
+                        key: "^user_app:bcmv8_SPI[0-6]_[0-9]{4}.*",
+                        options: {
+                            isDisabled: true,
+                            units: "std dev",
+                            min: -4,
+                            max: 4,
+                            palette: {
+                                name: "tree_mortality_spi_spei",
+                                handleAs: "json-fixed",
+                            },
+                            group: [
+                                "Tree Mortality - Sierra Nevada",
+                                "Standard Precipitation Index (2006 - 2021)",
+                            ],
+                            updateParameters: {
+                                time: true,
+                            },
+                            timeFormat: "YYYY",
+                            mappingOptions: {
+                                urlFunctions: {
+                                    openlayers: "kvpTimeParam_wmts",
+                                    cesium: "kvpTimeParam_wmts",
+                                },
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI1_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "1-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI1_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI2_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "2-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI2_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI3_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "3-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI3_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI4_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "4-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI4_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI5_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "5-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI5_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
+                        },
+                    },
+                    {
+                        key: "^user_app:bcmv8_SPI6_2006$",
+                        options: {
+                            isDisabled: false,
+                            title: "6-Year Standard Precipitation Index",
+                            mappingOptions: {
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_SPI6_{Time}&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                            },
                         },
                     },
 
@@ -174,7 +598,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_aet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -191,7 +615,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_cwd_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -208,7 +632,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pck_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -225,7 +649,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_pet_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -242,7 +666,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_ppt_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -259,7 +683,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_rch_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -276,7 +700,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_run_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -293,7 +717,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_str_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -310,7 +734,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmn_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -327,7 +751,7 @@ APPLICATION_CONFIG = {
                                 handleAs: "json-fixed",
                             },
                             mappingOptions: {
-                                url: "/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
+                                url: "https://ecopro-visualization.org/geoserver/gwc/service/wmts?layer=user_app%3Abcmv8_tmx_{Time}_proc&tilematrixset={TileMatrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={TileMatrix}&TileCol={TileCol}&TileRow={TileRow}",
                             },
                         },
                     },
@@ -351,7 +775,7 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
-                            url: "/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            url: "https://ecopro-visualization.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
                             clusterVector: true,
                             mappingOptions: {
                                 displayProps: {
@@ -361,7 +785,7 @@ APPLICATION_CONFIG = {
                                     maxScale: 20000,
                                     minSize: 7,
                                     maxSize: 30,
-                                    clusterRange: 40,
+                                    clusterRange: 5,
                                     palette: "YlOrRd",
                                 },
                             },
@@ -404,18 +828,17 @@ APPLICATION_CONFIG = {
                         key: "user_app:kelp_19840214",
                         options: {
                             isDisabled: false,
-                            title: "Kelp Biomass",
+                            title: "Kelp Biomass (1984 - 2023)",
                             group: "Kelp Mortality",
                         },
                     },
 
-
                     {
-                        key: "^user_app:kelp_predict_[0-9]{8}",
+                        key: "^user_app:kelp_None_[0-9]{8}",
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
-                            url: "/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_predict_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            url: "https://ecopro-visualization.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_None_{Time}14&outputFormat=application/json&exceptions=application/json",
                             clusterVector: true,
                             mappingOptions: {
                                 displayProps: {
@@ -453,14 +876,14 @@ APPLICATION_CONFIG = {
                                         {
                                             label: "Biomass (wet Kg)",
                                             value: "biomass",
-                                        }
+                                        },
                                     ],
                                 },
                             },
                         },
                     },
                     {
-                        key: "user_app:kelp_predict_20010814",
+                        key: "user_app:kelp_None_20230214",
                         options: {
                             isDisabled: false,
                             title: "Kelp Biomass Predict",
@@ -468,6 +891,52 @@ APPLICATION_CONFIG = {
                         },
                     },
 
+                    {
+                        key: "user_app:kelp_predict_mb_20010814",
+                        options: {
+                            isDisabled: false,
+                            handleAs: "vector_tile_points_mvt",
+                            url: "https://ecopro-visualization.org/geoserver/gwc/service/tms/1.0.0/user_app:kelp_predict_mb_20010814@EPSG%3A4326@geojson/{z}/{x}/{-y}.geojson",
+                            title: "Kelp Biomass Predict (20010814)",
+                            group: "Kelp Mortality",
+                            updateParameters: {
+                                time: false,
+                            },
+                            mappingOptions: {
+                                displayProps: {
+                                    color: "biomass",
+                                    colorByAverage: true,
+                                    minScale: 0,
+                                    maxScale: 20000,
+                                    minSize: 7,
+                                    maxSize: 30,
+                                    clusterRange: 40,
+                                    palette: "YlOrRd",
+                                },
+                            },
+                            min: 0,
+                            max: 20000,
+                            palette: {
+                                name: "YlOrRd",
+                                handleAs: "dynamic",
+                            },
+                            units: "Kg",
+                            metadata: {
+                                hoverDisplayProps: {
+                                    location: {
+                                        lat: "latitude",
+                                        lon: "longitude",
+                                    },
+                                    altProps: [
+                                        {
+                                            label: "Biomass (Kg)",
+                                            value: "biomass",
+                                        }
+                                    ],
+                                },
+                            },
+                        },
+                    },
                 ],
             },
             {

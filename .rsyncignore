@@ -10,5 +10,6 @@ ecopro/geoserver_data
 ecopro/geoserver_data.tar.gz
 ecopro/nginx_logs
 ecopro/pyvenv
-ecopro/*__pycache__*
-ecopro/*.egg-info
+ecopro/*/__pycache__
+ecopro/*/*.egg-info
+ecopro/*/.env

@@ -11,7 +11,7 @@ RUN apt-get update && apt-get -y install \
     cmake wget git ca-certificates build-essential
 RUN apt-get update && apt-get -y install \
     libsqlite3-dev zlib1g-dev
-RUN cd && git clone https://github.com/mapbox/tippecanoe.git tippecanoe \
+RUN cd && git clone https://github.com/felt/tippecanoe.git tippecanoe \
     && cd tippecanoe \
     && make -j \
     && make install

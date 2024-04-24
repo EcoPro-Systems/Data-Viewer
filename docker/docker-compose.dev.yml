@@ -2,16 +2,12 @@ version: "3"
 
 services:
     ecoprodev:
+        env_file:
+             - path: ${PWD}/docker/.env
         build:
             context: ${PWD}/.
             dockerfile: ${PWD}/docker/Dockerfile
-        networks:
-            - ecopro_net
         volumes:
             - ${PWD}/scripts:/ecopro/scripts
-            - ${PWD}/data_files:/datafiles
-
-networks:
-  ecopro_net:
-    name: ecopro_network
-    external: true
+            - ${ECOPRO_DATA_DIR}:/datafiles
+            - ${ECOPRO_GEOSERVER_DATA_DIR}:/geoserver_data
