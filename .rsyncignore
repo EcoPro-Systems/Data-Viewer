@@ -13,3 +13,4 @@ ecopro/pyvenv
 ecopro/**/__pycache__
 ecopro/**/*.egg-info
 ecopro/**/.env
+ecopro/docker/.env

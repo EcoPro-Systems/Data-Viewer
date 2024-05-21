@@ -775,7 +775,7 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: true,
                             handleAs: "vector_geojson",
-                            url: "https://ecopro-visualization.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}14&outputFormat=application/json&exceptions=application/json",
+                            url: "https://ecopro-visualization.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_{Time}&outputFormat=application/json&exceptions=application/json",
                             clusterVector: true,
                             mappingOptions: {
                                 displayProps: {
@@ -798,7 +798,7 @@ APPLICATION_CONFIG = {
                             updateParameters: {
                                 time: true,
                             },
-                            timeFormat: "YYYYMM _r_ month,+1,%3,-1",
+                            timeFormat: "YYYYMM14 _r_ month,+1,%3,-1",
                             urlFunctions: {
                                 openlayers: "kvpTimeParam",
                                 cesium: "kvpTimeParam",
@@ -834,73 +834,18 @@ APPLICATION_CONFIG = {
                     },
 
                     {
-                        key: "^user_app:kelp_None_[0-9]{8}",
+                        key: "user_app:kelp_predict_mb_[0-9]{8}",
                         options: {
                             isDisabled: true,
-                            handleAs: "vector_geojson",
-                            url: "https://ecopro-visualization.org/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeNames=user_app:kelp_None_{Time}14&outputFormat=application/json&exceptions=application/json",
-                            clusterVector: true,
-                            mappingOptions: {
-                                displayProps: {
-                                    color: "biomass",
-                                    minScale: 0,
-                                    maxScale: 20000,
-                                    minSize: 7,
-                                    maxSize: 30,
-                                    clusterRange: 40,
-                                    palette: "YlOrRd",
-                                },
-                            },
-                            min: 0,
-                            max: 20000,
-                            palette: {
-                                name: "YlOrRd",
-                                handleAs: "dynamic",
-                            },
+                            handleAs: "vector_tile_points_mvt",
+                            url: "https://ecopro-visualization.org/geoserver/gwc/service/tms/1.0.0/user_app:kelp_predict_mb_{Time}@EPSG%3A4326@geojson/{z}/{x}/{-y}.geojson",
                             updateParameters: {
                                 time: true,
                             },
-                            timeFormat: "YYYYMM _r_ month,+1,%3,-1",
+                            timeFormat: "YYYYMM14 _r_ month,+1,%3,-1",
                             urlFunctions: {
                                 openlayers: "kvpTimeParam",
                                 cesium: "kvpTimeParam",
-                            },
-                            units: "Kg",
-                            metadata: {
-                                hoverDisplayProps: {
-                                    location: {
-                                        lat: "latitude",
-                                        lon: "longitude",
-                                    },
-                                    altProps: [
-                                        {
-                                            label: "Biomass (wet Kg)",
-                                            value: "biomass",
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    },
-                    {
-                        key: "user_app:kelp_None_20230214",
-                        options: {
-                            isDisabled: false,
-                            title: "Kelp Biomass Predict",
-                            group: "Kelp Mortality",
-                        },
-                    },
-
-                    {
-                        key: "user_app:kelp_predict_mb_20010814",
-                        options: {
-                            isDisabled: false,
-                            handleAs: "vector_tile_points_mvt",
-                            url: "https://ecopro-visualization.org/geoserver/gwc/service/tms/1.0.0/user_app:kelp_predict_mb_20010814@EPSG%3A4326@geojson/{z}/{x}/{-y}.geojson",
-                            title: "Kelp Biomass Predict (20010814)",
-                            group: "Kelp Mortality",
-                            updateParameters: {
-                                time: false,
                             },
                             mappingOptions: {
                                 displayProps: {
@@ -933,6 +878,14 @@ APPLICATION_CONFIG = {
                                     ],
                                 },
                             },
+                        },
+                    },
+                    {
+                        key: "user_app:kelp_predict_mb_20230214",
+                        options: {
+                            isDisabled: false,
+                            title: "Kelp Biomass Predict (2024 - 2034)",
+                            group: "Kelp Mortality",
                         },
                     },
                 ],

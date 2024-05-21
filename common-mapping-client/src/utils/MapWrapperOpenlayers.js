@@ -379,7 +379,6 @@ export default class MapWrapperOpenlayers extends MapWrapperOpenlayersCore {
         }
 
         const source = new Ol_Source_VectorTile({
-            // format: new Ol_Format_MVT(),
             format: new Ol_Format_GeoJSON(),
             tileGrid: options.parsedTileGrid,
             tileSize: 256,
