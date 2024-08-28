@@ -151,7 +151,7 @@ APPLICATION_CONFIG = {
                         key: "^user_app:gridRefEsri_treeMortalitySN_severity_byYear_wgs84_2014_proc$",
                         options: {
                             isDisabled: false,
-                            title: "Tree Mortality Severity (2014 - 2021)",
+                            title: "Tree Mortality Severity (yearly, 2014 - 2021)",
                         },
                     },
 
@@ -162,7 +162,7 @@ APPLICATION_CONFIG = {
                             units: "mm",
                             group: [
                                 "Tree Mortality - Sierra Nevada",
-                                "Cumulative Precipitation (2006 - 2021)",
+                                "Cumulative Precipitation (yearly, 2006 - 2021)",
                             ],
                             updateParameters: {
                                 time: true,
@@ -280,7 +280,7 @@ APPLICATION_CONFIG = {
                             units: "mm",
                             group: [
                                 "Tree Mortality - Sierra Nevada",
-                                "Cumulative Water Balance (2006 - 2021)",
+                                "Cumulative Water Balance (yearly, 2006 - 2021)",
                             ],
                             updateParameters: {
                                 time: true,
@@ -404,7 +404,7 @@ APPLICATION_CONFIG = {
                             },
                             group: [
                                 "Tree Mortality - Sierra Nevada",
-                                "Standardized Water Balance Index (2006 - 2021)",
+                                "Standardized Water Balance Index (yearly, 2006 - 2021)",
                             ],
                             updateParameters: {
                                 time: true,
@@ -492,7 +492,7 @@ APPLICATION_CONFIG = {
                             },
                             group: [
                                 "Tree Mortality - Sierra Nevada",
-                                "Standard Precipitation Index (2006 - 2021)",
+                                "Standard Precipitation Index (yearly, 2006 - 2021)",
                             ],
                             updateParameters: {
                                 time: true,
@@ -572,7 +572,7 @@ APPLICATION_CONFIG = {
                         options: {
                             isDisabled: true,
                             units: " ",
-                            group: ["Tree Mortality - Sierra Nevada", "Climate Data (1980 - 2022)"],
+                            group: ["Tree Mortality - Sierra Nevada", "Climate Data (yearly, 1980 - 2022)"],
                             updateParameters: {
                                 time: true,
                             },
@@ -828,7 +828,7 @@ APPLICATION_CONFIG = {
                         key: "user_app:kelp_19840214",
                         options: {
                             isDisabled: false,
-                            title: "Kelp Biomass (1984 - 2023)",
+                            title: "Kelp Biomass (quarterly, 1984 - 2023)",
                             group: "Kelp Mortality",
                         },
                     },
@@ -884,7 +884,7 @@ APPLICATION_CONFIG = {
                         key: "user_app:kelp_predict_mb_20230214",
                         options: {
                             isDisabled: false,
-                            title: "Kelp Biomass Predict (2024 - 2034)",
+                            title: "Kelp Biomass Predict (quarterly, 2024 - 2034)",
                             group: "Kelp Mortality",
                         },
                     },
