@@ -33,6 +33,58 @@ export class LayerMenuContainer extends Component {
         };
     }
 
+    _groupLayers = (layerList) => {
+        const groupedLayers = layerList.reduce(
+            (acc, layer) => {
+                let groups = layer.get("group");
+                if (groups && groups !== appStrings.LAYER_GROUP_NONE) {
+                    if (typeof groups.toJS === "function") {
+                        groups = groups.toJS();
+                    } else if (!Array.isArray(groups)) {
+                        groups = [groups];
+                    }
+
+                    let insertGroup = acc;
+                    groups.forEach((groupStr) => {
+                        if (!insertGroup[groupStr]) {
+                            insertGroup[groupStr] = { _layers_: [] };
+                        }
+                        insertGroup = insertGroup[groupStr];
+                    });
+                    insertGroup._layers_.push(layer);
+                } else {
+                    acc._layers_.push(layer);
+                }
+                return acc;
+            },
+            { _layers_: [] }
+        );
+        return groupedLayers;
+    };
+
+    _buildTree = (groupObj, nodeKey) => {
+        const { _layers_: items, ...subGroups } = groupObj;
+        const nodeData = {
+            label: nodeKey,
+            isLeaf: false,
+            items: items
+                ? items.map((layer) => {
+                    return {
+                        layer,
+                        isLeaf: true,
+                    };
+                })
+                : [],
+        };
+        if (subGroups) {
+            const keys = Object.keys(subGroups).sort().reverse();
+            keys.forEach((groupKey) => {
+                nodeData.items.unshift(this._buildTree(subGroups[groupKey], groupKey, nodeKey));
+            });
+        }
+        return nodeData;
+    };
+
     countActiveInGroup = (group) => {
         let count = 0;
         for (const item of group.items) {
@@ -46,10 +98,12 @@ export class LayerMenuContainer extends Component {
     };
 
     renderLayerGroups = (layerGroups, activeNum, isSub = false) => {
+        const { layerMenuAutoExpand } = this.props;
         const { groupOpen } = this.state;
         return (
             <>
                 {layerGroups.map((layerGroup) => {
+                    const activeLayers = this.countActiveInGroup(layerGroup);
                     const leafNodes = layerGroup.items.filter((item) => item.isLeaf);
                     const subGroups = layerGroup.items.filter((item) => !item.isLeaf);
                     const isOpen = !!groupOpen[layerGroup.label];
@@ -63,7 +117,15 @@ export class LayerMenuContainer extends Component {
                         [styles.closed]: !isOpen,
                     });
 
-                    const activeLayers = this.countActiveInGroup(layerGroup);
+                    // oh eww you should never do such hacky things
+                    if (layerMenuAutoExpand && activeLayers > 0) {
+                        setTimeout(() => {
+                            this.setState({
+                                groupOpen: { ...this.state.groupOpen, [layerGroup.label]: true },
+                            });
+                        }, 0);
+                    }
+
                     return (
                         <div key={`layer_group_${layerGroup.label}`} className={groupClass}>
                             <div
@@ -114,58 +176,11 @@ export class LayerMenuContainer extends Component {
     render() {
         const layerList = this.props.layers.filter((layer) => !layer.get("isDisabled")).toList();
 
-        // group layers together
-        const groupedLayers = layerList.reduce(
-            (acc, layer) => {
-                let groups = layer.get("group");
-                if (groups && groups !== appStrings.LAYER_GROUP_NONE) {
-                    if (typeof groups.toJS === "function") {
-                        groups = groups.toJS();
-                    } else if (!Array.isArray(groups)) {
-                        groups = [groups];
-                    }
-
-                    let insertGroup = acc;
-                    groups.forEach((groupStr) => {
-                        if (!insertGroup[groupStr]) {
-                            insertGroup[groupStr] = { _layers_: [] };
-                        }
-                        insertGroup = insertGroup[groupStr];
-                    });
-                    insertGroup._layers_.push(layer);
-                } else {
-                    acc._layers_.push(layer);
-                }
-                return acc;
-            },
-            { _layers_: [] }
-        );
+        const groupedLayers = this._groupLayers(layerList);
 
         const { _layers_: nonGroupedLayers, ...layerGroups } = groupedLayers;
 
-        const buildTree = (groupObj, nodeKey) => {
-            const { _layers_: items, ...subGroups } = groupObj;
-            const nodeData = {
-                label: nodeKey,
-                isLeaf: false,
-                items: items
-                    ? items.map((layer) => {
-                          return {
-                              layer,
-                              isLeaf: true,
-                          };
-                      })
-                    : [],
-            };
-            if (subGroups) {
-                const keys = Object.keys(subGroups).sort().reverse();
-                keys.forEach((groupKey) => {
-                    nodeData.items.unshift(buildTree(subGroups[groupKey], groupKey, nodeKey));
-                });
-            }
-            return nodeData;
-        };
-        const treeList = buildTree(layerGroups, null).items;
+        const treeList = this._buildTree(layerGroups, null).items;
 
         const activeNum = layerList.count((el) => {
             return el.get("isActive");
@@ -239,6 +254,7 @@ LayerMenuContainer.propTypes = {
 function mapStateToProps(state) {
     return {
         layerMenuOpen: state.view.get("layerMenuOpen"),
+        layerMenuAutoExpand: state.view.get("layerMenuAutoexpand"),
         layers: state.map.getIn(["layers", appStringsCore.LAYER_GROUP_TYPE_DATA]),
         palettes: state.map.get("palettes"),
         distractionFreeMode: state.view.get("distractionFreeMode"),

@@ -11,7 +11,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 // import pink from "@material-ui/core/colors/pink";
-import * as appActions from "_core/actions/appActions";
+import * as appActionsCore from "_core/actions/appActions";
+import * as appActions from "actions/appActions";
 import * as mapActions from "_core/actions/mapActions";
 import * as appStrings from "_core/constants/appStrings";
 import appConfig from "constants/appConfig";
@@ -111,6 +112,9 @@ export class AppContainer extends Component {
                         this.props.runUrlConfig(this.urlParams);
                     }
 
+                    // once layers have been added, turn off auto-expansion of the menu
+                    this.props.setLayerMenuAutoexpand(false);
+
                     // ReactTooltip needs to be rebuilt to account
                     // for dynamic lists in LayerMenuContainer
                     // ReactTooltip.rebuild();
@@ -176,16 +180,17 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        completeInitialLoad: bindActionCreators(appActions.completeInitialLoad, dispatch),
+        completeInitialLoad: bindActionCreators(appActionsCore.completeInitialLoad, dispatch),
         checkBrowserFunctionalities: bindActionCreators(
-            appActions.checkBrowserFunctionalities,
+            appActionsCore.checkBrowserFunctionalities,
             dispatch
         ),
         loadInitialData: bindActionCreators(mapActions.loadInitialData, dispatch),
         activateDefaultLayers: bindActionCreators(mapActions.activateDefaultLayers, dispatch),
-        runUrlConfig: bindActionCreators(appActions.runUrlConfig, dispatch),
+        runUrlConfig: bindActionCreators(appActionsCore.runUrlConfig, dispatch),
         initializeMap: bindActionCreators(mapActions.initializeMap, dispatch),
         setMapView: bindActionCreators(mapActions.setMapView, dispatch),
+        setLayerMenuAutoexpand: bindActionCreators(appActions.setLayerMenuAutoexpand, dispatch),
     };
 }
 
